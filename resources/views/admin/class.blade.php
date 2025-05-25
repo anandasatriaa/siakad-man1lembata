@@ -4,34 +4,12 @@
 
 @push('css')
 
-<style>
-    .avatar img {
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.clickable-row {
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    
-    .clickable-row:hover {
-        background-color: #f8f9fa;
-    }
-    
-    .collapse-row td {
-        padding: 0 !important;
-        border-bottom: 2px solid #dee2e6;
-    }
-    
-    .bi-chevron-right {
-        transition: transform 0.3s ease;
-    }
-    
-    .collapsed .bi-chevron-right {
-        transform: rotate(90deg);
-    }
-</style>
+    <style>
+        .avatar img {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
 
 @endpush
 
@@ -58,129 +36,184 @@
                     Table Data Kelas
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover" id="table-kelas">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>No</th>
-                                    <th>Nama Kelas</th>
-                                    <th>Wali Kelas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Data Dummy 1 -->
-                                <tr data-bs-toggle="collapse" data-bs-target="#siswaXIPA1" aria-expanded="false" 
-                                    class="clickable-row align-middle">
-                                    <td class="text-center">
-                                        <i class="bi bi-chevron-right"></i>
-                                    </td>
-                                    <td>1</td>
-                                    <td>X IPA 1</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-md me-3">
-                                                <img src="{{ asset('assets/images/faces/2.jpg') }}" alt="Foto Profil">
+                    @php
+                        $grades = ['X', 'XI', 'XII'];
+                        $classes = [
+                            'X' => [
+                                (object) [
+                                    'name' => 'X IPA 1',
+                                    'teacher' => (object) [
+                                        'name' => 'Pak Budi',
+                                        'avatar' => asset('assets/images/faces/2.jpg'),
+                                    ],
+                                    'students' => [
+                                        (object) [
+                                            'name' => 'Andi',
+                                            'avatar' => asset('assets/images/faces/1.jpg'),
+                                            'phone' => '081234567890',
+                                            'address' => 'Jl. Merdeka No.10, Jakarta',
+                                            'email' => 'andi@example.com',
+                                        ],
+                                        (object) [
+                                            'name' => 'Siti',
+                                            'avatar' => asset('assets/images/faces/3.jpg'),
+                                            'phone' => '082345678901',
+                                            'address' => 'Jl. Melati No.5, Bandung',
+                                            'email' => 'siti@example.com',
+                                        ],
+                                        (object) [
+                                            'name' => 'Rina',
+                                            'avatar' => asset('assets/images/faces/4.jpg'),
+                                            'phone' => '083456789012',
+                                            'address' => 'Jl. Mawar No.8, Surabaya',
+                                            'email' => 'rina@example.com',
+                                        ],
+                                    ],
+                                ],
+                                (object) [
+                                    'name' => 'X IPA 2',
+                                    'teacher' => (object) ['name' => 'Bu Ani', 'avatar' => asset('assets/images/faces/5.jpg')],
+                                    'students' => [
+                                        (object) [
+                                            'name' => 'Joko',
+                                            'avatar' => asset('assets/images/faces/6.jpg'),
+                                            'phone' => '084567890123',
+                                            'address' => 'Jl. Kenanga No.12, Yogyakarta',
+                                            'email' => 'joko@example.com',
+                                        ],
+                                        (object) [
+                                            'name' => 'Dewi',
+                                            'avatar' => asset('assets/images/faces/7.jpg'),
+                                            'phone' => '085678901234',
+                                            'address' => 'Jl. Anggrek No.3, Medan',
+                                            'email' => 'dewi@example.com',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'XI' => [
+                                (object) [
+                                    'name' => 'XI IPA 1',
+                                    'teacher' => (object) ['name' => 'Pak Agus', 'avatar' => asset('assets/images/faces/8.jpg')],
+                                    'students' => [
+                                        (object) [
+                                            'name' => 'Tono',
+                                            'avatar' => asset('assets/images/faces/9.jpg'),
+                                            'phone' => '086789012345',
+                                            'address' => 'Jl. Cempaka No.7, Semarang',
+                                            'email' => 'tono@example.com',
+                                        ],
+                                        (object) [
+                                            'name' => 'Maya',
+                                            'avatar' => asset('assets/images/faces/10.jpg'),
+                                            'phone' => '087890123456',
+                                            'address' => 'Jl. Dahlia No.4, Malang',
+                                            'email' => 'maya@example.com',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'XII' => [
+                                (object) [
+                                    'name' => 'XII IPS 1',
+                                    'teacher' => (object) ['name' => 'Bu Rina', 'avatar' => asset('assets/images/faces/11.jpg')],
+                                    'students' => [
+                                        (object) [
+                                            'name' => 'Beni',
+                                            'avatar' => asset('assets/images/faces/12.jpg'),
+                                            'phone' => '088901234567',
+                                            'address' => 'Jl. Flamboyan No.9, Bali',
+                                            'email' => 'beni@example.com',
+                                        ],
+                                        (object) [
+                                            'name' => 'Lia',
+                                            'avatar' => asset('assets/images/faces/13.jpg'),
+                                            'phone' => '089012345678',
+                                            'address' => 'Jl. Kamboja No.6, Makassar',
+                                            'email' => 'lia@example.com',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ];
+                    @endphp
+
+                    <ul class="nav nav-tabs nav-justified mb-4" role="tablist">
+                        @foreach($grades as $grade)
+                            <li class="nav-item flex-fill text-center" role="presentation">
+                                <button class="nav-link w-100 @if($loop->first) active @endif" id="tab-{{ $grade }}"
+                                    data-bs-toggle="tab" data-bs-target="#kelas-{{ $grade }}" type="button" role="tab"
+                                    aria-controls="kelas-{{ $grade }}"
+                                    aria-selected="@if($loop->first) true @else false @endif">
+                                    Kelas {{ $grade }}
+                                </button>
+                            </li>
+                        @endforeach
+                    </ul>
+
+                    <div class="tab-content">
+                        @foreach($grades as $grade)
+                            <div class="tab-pane fade @if($loop->first) show active @endif" id="kelas-{{ $grade }}"
+                                role="tabpanel" aria-labelledby="tab-{{ $grade }}">
+
+                                @if(!empty($classes[$grade]))
+                                    @foreach($classes[$grade] as $idx => $class)
+                                        @php $collapseId = "collapse-{$grade}-{$idx}"; @endphp
+                                        <div class="card mb-3">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar avatar-md me-3">
+                                                        <img src="{{ $class->teacher->avatar }}" class="rounded-circle"
+                                                            alt="Foto Wali Kelas">
+                                                    </div>
+                                                    <div>
+                                                        <strong>{{ $class->name }}</strong><br>
+                                                        <small class="text-muted">Wali: {{ $class->teacher->name }}</small>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse"
+                                                    data-bs-target="#{{ $collapseId }}" aria-expanded="false"
+                                                    aria-controls="{{ $collapseId }}">
+                                                    Lihat Murid
+                                                </button>
                                             </div>
-                                            <span>Budi Santoso</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="collapse" id="siswaXIPA1">
-                                    <td colspan="4">
-                                        <div class="p-3">
-                                            <h6 class="mb-3">Daftar Siswa X IPA 1</h6>
-                                            <div class="table-responsive">
-                                                <table class="table table-sm">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>NIS</th>
-                                                            <th>Nama Siswa</th>
-                                                            <th>Jenis Kelamin</th>
-                                                            <th>Telepon</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>202401001</td>
-                                                            <td><div class="avatar avatar-md me-3">
-                                                                <img src="{{ asset('assets/images/faces/6.jpg') }}" alt="Foto Profil">
-                                                            </div> Andi Wijaya</td>
-                                                            <td>Laki-laki</td>
-                                                            <td>0812-3456-7890</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>202401002</td>
-                                                            <td><div class="avatar avatar-md me-3">
-                                                                <img src="{{ asset('assets/images/faces/7.jpg') }}" alt="Foto Profil">
-                                                            </div> Siti Aminah</td>
-                                                            <td>Perempuan</td>
-                                                            <td>0813-9876-5432</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                            <div id="{{ $collapseId }}" class="collapse">
+                                                <div class="card-body">
+                                                    <h6>Daftar Murid:</h6>
+                                                    <ul class="list-group">
+                                                        @foreach($class->students as $student)
+                                                            <li class="list-group-item">
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <div class="avatar avatar-sm me-3">
+                                                                        <img src="{{ $student->avatar }}" class="rounded-circle"
+                                                                            alt="Foto Murid">
+                                                                    </div>
+                                                                    <div>
+                                                                        <strong>{{ $student->name }}</strong><br>
+                                                                        <small class="text-muted">{{ $student->email }}</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ms-5">
+                                                                    <div><i class="bi bi-telephone-fill me-1"></i>{{ $student->phone }}
+                                                                    </div>
+                                                                    <div><i class="bi bi-geo-alt-fill me-1"></i>{{ $student->address }}
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                    </td>
-                                </tr>
-        
-                                <!-- Data Dummy 2 -->
-                                <tr data-bs-toggle="collapse" data-bs-target="#siswaXIPA2" aria-expanded="false" 
-                                    class="clickable-row align-middle">
-                                    <td class="text-center">
-                                        <i class="bi bi-chevron-right"></i>
-                                    </td>
-                                    <td>2</td>
-                                    <td>X IPA 2</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-md me-3">
-                                                <img src="{{ asset('assets/images/faces/1.jpg') }}" alt="Foto Profil">
-                                            </div>
-                                            <span>Ani Rahayu</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="collapse" id="siswaXIPA2">
-                                    <td colspan="4">
-                                        <div class="p-3">
-                                            <h6 class="mb-3">Daftar Siswa X IPA 2</h6>
-                                            <div class="table-responsive">
-                                                <table class="table table-sm">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>NIS</th>
-                                                            <th>Nama Siswa</th>
-                                                            <th>Jenis Kelamin</th>
-                                                            <th>Telepon</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>202401003</td>
-                                                            <td><div class="avatar avatar-md me-3">
-                                                                <img src="{{ asset('assets/images/faces/7.jpg') }}" alt="Foto Profil">
-                                                            </div> Rina Melati</td>
-                                                            <td>Perempuan</td>
-                                                            <td>0812-1111-2222</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>202401004</td>
-                                                            <td><div class="avatar avatar-md me-3">
-                                                                <img src="{{ asset('assets/images/faces/8.jpg') }}" alt="Foto Profil">
-                                                            </div> Dedi Pratama</td>
-                                                            <td>Laki-laki</td>
-                                                            <td>0813-3333-4444</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    @endforeach
+                                @else
+                                    <p class="text-muted">Belum ada data kelas untuk Kelas {{ $grade }}.</p>
+                                @endif
+
+                            </div>
+                        @endforeach
                     </div>
+
                 </div>
             </div>
         </section>
@@ -207,8 +240,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Wali Kelas <span
-                                            class="text-danger">*</span></label>
+                                    <label for="" class="form-label">Wali Kelas <span class="text-danger">*</span></label>
                                     <select class="form-select" id="" name="" required>
                                         <option value="">Pilih Wali Kelas</option>
                                         <option value="Andi">Andi</option>
@@ -224,8 +256,7 @@
                             <!-- Kolom Kanan -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Siswa <span
-                                            class="text-danger">*</span></label>
+                                    <label for="" class="form-label">Siswa <span class="text-danger">*</span></label>
                                     <select class="form-select" id="" name="" required>
                                         <option value="">Pilih Siswa</option>
                                         <option value="Andi">Andi</option>
@@ -256,12 +287,14 @@
         let dataTable = new simpleDatatables.DataTable(tableKelas);
     </script>
 
-<script>
-    document.querySelectorAll('.clickable-row').forEach(row => {
-        row.addEventListener('click', (e) => {
-            const icon = row.querySelector('.bi-chevron-right');
-            row.classList.toggle('collapsed');
+    <script>
+        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const chevron = this.querySelector('.chevron');
+                const target = document.querySelector(this.dataset.bsTarget);
+                target.addEventListener('shown.bs.collapse', () => chevron.innerHTML = '\u25B2');
+                target.addEventListener('hidden.bs.collapse', () => chevron.innerHTML = '\u25BC');
+            });
         });
-    });
-</script>
+    </script>
 @endpush

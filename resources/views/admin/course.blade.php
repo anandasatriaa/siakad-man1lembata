@@ -4,12 +4,12 @@
 
 @push('css')
 
-<style>
-    .avatar img {
-    border-radius: 50%;
-    object-fit: cover;
-}
-</style>
+    <style>
+        .avatar img {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
 
 @endpush
 
@@ -36,93 +36,116 @@
                     Table Data Mata Pelajaran
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover" id="table-mata-pelajaran">
-                            <thead>
-                                <tr>
-                                    <th>NIS</th>
-                                    <th>Nama Lengkap</th>
-                                    <th>Jenis Kelamin</th>
-                                    <th>Telepon</th>
-                                    <th>Wali Kelas</th>
-                                    <th>Tahun Masuk</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Data Dummy 1 -->
-                                <tr>
-                                    <td>202401001</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-md me-3">
-                                                <img src="{{ asset('assets/images/faces/2.jpg') }}" alt="Foto Profil">
-                                            </div>
-                                            <span>Budi Santoso</span>
-                                        </div>
-                                    </td>
-                                    <td>Laki-laki</td>
-                                    <td>0812-3456-7890</td>
-                                    <td>X IPA 1</td>
-                                    <td>2024</td>
-                                    <td>
-                                        <span class="badge bg-success">Aktif</span>
-                                    </td>
-                                </tr>
-        
-                                <!-- Data Dummy 2 -->
-                                <tr>
-                                    <td>202401002</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-md me-3">
-                                                <img src="{{ asset('assets/images/faces/3.jpg') }}" alt="Foto Profil">
-                                            </div>
-                                            <span>Siti Aminah</span>
-                                        </div>
-                                    </td>
-                                    <td>Perempuan</td>
-                                    <td>0813-9876-5432</td>
-                                    <td>X IPS 2</td>
-                                    <td>2024</td>
-                                    <td>
-                                        <span class="badge bg-success">Aktif</span>
-                                    </td>
-                                </tr>
-        
-                                <!-- Data Dummy 3 -->
-                                <tr>
-                                    <td>202301005</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-md me-3">
-                                                <img src="{{ asset('assets/images/faces/4.jpg') }}" alt="Foto Profil">
-                                            </div>
-                                            <span>Andi Wijaya</span>
-                                        </div>
-                                    </td>
-                                    <td>Laki-laki</td>
-                                    <td>0821-1122-3344</td>
-                                    <td>XI IPA 3</td>
-                                    <td>2023</td>
-                                    <td>
-                                        <span class="badge bg-secondary">Non-Aktif</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header">
+                                Table Data Mata Pelajaran per Kelas (Klik untuk buka/tutup)
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover" id="table-mata-pelajaran">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">Kelas / Klik untuk expand</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{-- Kelas X --}}
+                                            <tr class="table-primary" data-bs-toggle="collapse" data-bs-target=".groupX"
+                                                aria-expanded="false" style="cursor: pointer;">
+                                                <td colspan="2">Kelas X</td>
+                                            </tr>
+                                            <tr class="collapse groupX">
+                                                <td></td>
+                                                <td>Matematika</td>
+                                            </tr>
+                                            <tr class="collapse groupX">
+                                                <td></td>
+                                                <td>Fisika</td>
+                                            </tr>
+                                            <tr class="collapse groupX">
+                                                <td></td>
+                                                <td>Kimia</td>
+                                            </tr>
+                                            <tr class="collapse groupX">
+                                                <td></td>
+                                                <td>Biologi</td>
+                                            </tr>
+                                            <tr class="collapse groupX">
+                                                <td></td>
+                                                <td>Bahasa Inggris</td>
+                                            </tr>
+
+                                            {{-- Kelas XI --}}
+                                            <tr class="table-primary" data-bs-toggle="collapse" data-bs-target=".groupXI"
+                                                aria-expanded="false" style="cursor: pointer;">
+                                                <td colspan="2">Kelas XI</td>
+                                            </tr>
+                                            <tr class="collapse groupXI">
+                                                <td></td>
+                                                <td>Ekonomi</td>
+                                            </tr>
+                                            <tr class="collapse groupXI">
+                                                <td></td>
+                                                <td>Sosiologi</td>
+                                            </tr>
+                                            <tr class="collapse groupXI">
+                                                <td></td>
+                                                <td>Geografi</td>
+                                            </tr>
+                                            <tr class="collapse groupXI">
+                                                <td></td>
+                                                <td>Sejarah</td>
+                                            </tr>
+                                            <tr class="collapse groupXI">
+                                                <td></td>
+                                                <td>Bahasa Indonesia</td>
+                                            </tr>
+
+                                            {{-- Kelas XII --}}
+                                            <tr class="table-primary" data-bs-toggle="collapse" data-bs-target=".groupXII"
+                                                aria-expanded="false" style="cursor: pointer;">
+                                                <td colspan="2">Kelas XII</td>
+                                            </tr>
+                                            <tr class="collapse groupXII">
+                                                <td></td>
+                                                <td>Sastra Indonesia</td>
+                                            </tr>
+                                            <tr class="collapse groupXII">
+                                                <td></td>
+                                                <td>Antropologi</td>
+                                            </tr>
+                                            <tr class="collapse groupXII">
+                                                <td></td>
+                                                <td>Bahasa Asing</td>
+                                            </tr>
+                                            <tr class="collapse groupXII">
+                                                <td></td>
+                                                <td>Seni Budaya</td>
+                                            </tr>
+                                            <tr class="collapse groupXII">
+                                                <td></td>
+                                                <td>Kewirausahaan</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
         </section>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="tambahMataPelajaranModal" tabindex="-1" aria-labelledby="tambahMataPelajaranModalLabel" aria-hidden="true">
+    <div class="modal fade" id="tambahMataPelajaranModal" tabindex="-1" aria-labelledby="tambahMataPelajaranModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
-                    <h5 class="modal-title text-white" id="tambahMataPelajaranModalLabel">Tambah Data Mata Pelajaran Baru</h5>
+                    <h5 class="modal-title text-white" id="tambahMataPelajaranModalLabel">Tambah Data Mata Pelajaran Baru
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form>
@@ -163,9 +186,4 @@
 @endsection
 
 @push('js')
-    <script>
-        // Simple Datatable
-        let tableMataPelajaran = document.querySelector('#table-mata-pelajaran');
-        let dataTable = new simpleDatatables.DataTable(tableMataPelajaran);
-    </script>
 @endpush
