@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('teachers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nis', 20)->unique();
+            $table->string('nip', 20)->unique();
             $table->string('full_name', 100);
             $table->enum('gender', ['F', 'M']);
             $table->string('birth_place', 100);
@@ -23,15 +23,10 @@ return new class extends Migration
             $table->string('email', 100)->nullable();
             $table->string('religion', 20);
             $table->year('enrollment_year');
-            $table->string('guardian_name', 100);
-            $table->string('guardian_phone', 20);
             $table->string('photo')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->unsignedBigInteger('class_id')->nullable();
-            $table->unsignedBigInteger('user_id')
-                ->nullable()
-                ->unique()
-                ->comment('link ke users.id, nullable karena akun belum dibuat');
+            $table->unsignedBigInteger('user_id')->nullable()->unique()->comment('link ke users.id');
             $table->timestamps();
 
             $table->foreign('user_id')
@@ -51,6 +46,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('teachers');
     }
 };

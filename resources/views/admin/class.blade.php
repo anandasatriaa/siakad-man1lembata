@@ -38,104 +38,6 @@
                 <div class="card-body">
                     @php
                         $grades = ['X', 'XI', 'XII'];
-                        $classes = [
-                            'X' => [
-                                (object) [
-                                    'name' => 'X IPA 1',
-                                    'teacher' => (object) [
-                                        'name' => 'Pak Budi',
-                                        'avatar' => asset('assets/images/faces/2.jpg'),
-                                    ],
-                                    'students' => [
-                                        (object) [
-                                            'name' => 'Andi',
-                                            'avatar' => asset('assets/images/faces/1.jpg'),
-                                            'phone' => '081234567890',
-                                            'address' => 'Jl. Merdeka No.10, Jakarta',
-                                            'email' => 'andi@example.com',
-                                        ],
-                                        (object) [
-                                            'name' => 'Siti',
-                                            'avatar' => asset('assets/images/faces/3.jpg'),
-                                            'phone' => '082345678901',
-                                            'address' => 'Jl. Melati No.5, Bandung',
-                                            'email' => 'siti@example.com',
-                                        ],
-                                        (object) [
-                                            'name' => 'Rina',
-                                            'avatar' => asset('assets/images/faces/4.jpg'),
-                                            'phone' => '083456789012',
-                                            'address' => 'Jl. Mawar No.8, Surabaya',
-                                            'email' => 'rina@example.com',
-                                        ],
-                                    ],
-                                ],
-                                (object) [
-                                    'name' => 'X IPA 2',
-                                    'teacher' => (object) ['name' => 'Bu Ani', 'avatar' => asset('assets/images/faces/5.jpg')],
-                                    'students' => [
-                                        (object) [
-                                            'name' => 'Joko',
-                                            'avatar' => asset('assets/images/faces/6.jpg'),
-                                            'phone' => '084567890123',
-                                            'address' => 'Jl. Kenanga No.12, Yogyakarta',
-                                            'email' => 'joko@example.com',
-                                        ],
-                                        (object) [
-                                            'name' => 'Dewi',
-                                            'avatar' => asset('assets/images/faces/7.jpg'),
-                                            'phone' => '085678901234',
-                                            'address' => 'Jl. Anggrek No.3, Medan',
-                                            'email' => 'dewi@example.com',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                            'XI' => [
-                                (object) [
-                                    'name' => 'XI IPA 1',
-                                    'teacher' => (object) ['name' => 'Pak Agus', 'avatar' => asset('assets/images/faces/8.jpg')],
-                                    'students' => [
-                                        (object) [
-                                            'name' => 'Tono',
-                                            'avatar' => asset('assets/images/faces/9.jpg'),
-                                            'phone' => '086789012345',
-                                            'address' => 'Jl. Cempaka No.7, Semarang',
-                                            'email' => 'tono@example.com',
-                                        ],
-                                        (object) [
-                                            'name' => 'Maya',
-                                            'avatar' => asset('assets/images/faces/10.jpg'),
-                                            'phone' => '087890123456',
-                                            'address' => 'Jl. Dahlia No.4, Malang',
-                                            'email' => 'maya@example.com',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                            'XII' => [
-                                (object) [
-                                    'name' => 'XII IPS 1',
-                                    'teacher' => (object) ['name' => 'Bu Rina', 'avatar' => asset('assets/images/faces/11.jpg')],
-                                    'students' => [
-                                        (object) [
-                                            'name' => 'Beni',
-                                            'avatar' => asset('assets/images/faces/12.jpg'),
-                                            'phone' => '088901234567',
-                                            'address' => 'Jl. Flamboyan No.9, Bali',
-                                            'email' => 'beni@example.com',
-                                        ],
-                                        (object) [
-                                            'name' => 'Lia',
-                                            'avatar' => asset('assets/images/faces/13.jpg'),
-                                            'phone' => '089012345678',
-                                            'address' => 'Jl. Kamboja No.6, Makassar',
-                                            'email' => 'lia@example.com',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ];
                     @endphp
 
                     <ul class="nav nav-tabs nav-justified mb-4" role="tablist">
@@ -163,19 +65,25 @@
                                             <div class="card-header d-flex justify-content-between align-items-center">
                                                 <div class="d-flex align-items-center">
                                                     <div class="avatar avatar-md me-3">
-                                                        <img src="{{ $class->teacher->avatar }}" class="rounded-circle"
-                                                            alt="Foto Wali Kelas">
+                                                        <img src="{{ optional($class->teacher)->photo ? asset('storage/' . $class->teacher->photo) : asset('assets/images/faces/default.jpg') }}"
+                                                            class="rounded-circle" alt="Foto Wali Kelas">
                                                     </div>
                                                     <div>
                                                         <strong>{{ $class->name }}</strong><br>
-                                                        <small class="text-muted">Wali: {{ $class->teacher->name }}</small>
+                                                        <small class="text-muted">Wali: {{ optional($class->teacher)->full_name ?? 'Belum ditentukan' }}</small>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse"
-                                                    data-bs-target="#{{ $collapseId }}" aria-expanded="false"
-                                                    aria-controls="{{ $collapseId }}">
-                                                    Lihat Murid
-                                                </button>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse"
+                                                        data-bs-target="#{{ $collapseId }}" aria-expanded="false"
+                                                        aria-controls="{{ $collapseId }}">
+                                                        Lihat Murid
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal"
+                                                        data-bs-target="#modalEditKelas-{{ $class->id }}">
+                                                        Edit
+                                                    </button>
+                                                </div>
                                             </div>
                                             <div id="{{ $collapseId }}" class="collapse">
                                                 <div class="card-body">
@@ -189,7 +97,7 @@
                                                                             alt="Foto Murid">
                                                                     </div>
                                                                     <div>
-                                                                        <strong>{{ $student->name }}</strong><br>
+                                                                        <strong>{{ $student->full_name }}</strong>
                                                                         <small class="text-muted">{{ $student->email }}</small>
                                                                     </div>
                                                                 </div>
@@ -205,11 +113,67 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- Modal Edit Kelas -->
+                                        <div class="modal fade" id="modalEditKelas-{{ $class->id }}" tabindex="-1" aria-labelledby="modalEditKelasLabel-{{ $class->id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <form action="{{ route('admin.class.update', $class->id) }}" method="POST">
+                                                        @csrf
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="modalEditKelasLabel-{{ $class->id }}">Edit Kelas {{ $class->name }}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Nama Kelas</label>
+                                                                <input type="text" class="form-control" value="{{ $class->name }}" readonly>
+                                                            </div>
+
+                                                            <div class="mb-3">
+                                                                <label for="teacher_id" class="form-label">Wali Kelas</label>
+                                                                <select name="teacher_id" class="form-select" required>
+                                                                    @foreach ($teachers as $teacher)
+                                                                        <option value="{{ $teacher->id }}"
+                                                                            {{ optional($class->teacher)->id == $teacher->id ? 'selected' : '' }}>
+                                                                            {{ $teacher->full_name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Daftar Siswa</label>
+                                                                <div class="row">
+                                                                    @foreach ($students as $student)
+                                                                        <div class="col-md-6">
+                                                                            <div class="form-check">
+                                                                                <input class="form-check-input" type="checkbox" name="students[]"
+                                                                                    value="{{ $student->id }}"
+                                                                                    {{ in_array($student->id, $class->students->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                                                                <label class="form-check-label">
+                                                                                    {{ $student->full_name }}
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 @else
                                     <p class="text-muted">Belum ada data kelas untuk Kelas {{ $grade }}.</p>
                                 @endif
-
                             </div>
                         @endforeach
                     </div>
@@ -227,28 +191,27 @@
                     <h5 class="modal-title text-white" id="tambahKelasModalLabel">Tambah Data Kelas Baru</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form>
+                <form action="{{ route('admin.class.store') }}" method="POST">
+                    @csrf
                     <div class="modal-body">
                         <div class="row g-3">
                             <!-- Kolom Kiri -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="full_name" class="form-label">Nama Kelas <span
+                                    <label for="name" class="form-label">Nama Kelas <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="full_name" name="full_name" required>
+                                    <input type="text" class="form-control" id="name" name="name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Wali Kelas <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="" name="" required>
+                                    <label for="teacher_id" class="form-label">Wali Kelas <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select" id="teacher_id" name="teacher_id" required>
                                         <option value="">Pilih Wali Kelas</option>
-                                        <option value="Andi">Andi</option>
-                                        <option value="Raden">Raden</option>
-                                        <option value="Bagas">Bagas</option>
-                                        <option value="Andre">Andre</option>
-                                        <option value="Adrian">Adrian</option>
-                                        <option value="Salma">Salma</option>
+                                        @foreach($teachers as $teacher)
+                                            <option value="{{ $teacher->id }}">{{ $teacher->full_name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -256,17 +219,25 @@
                             <!-- Kolom Kanan -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="" class="form-label">Siswa <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="" name="" required>
-                                        <option value="">Pilih Siswa</option>
-                                        <option value="Andi">Andi</option>
-                                        <option value="Raden">Raden</option>
-                                        <option value="Bagas">Bagas</option>
-                                        <option value="Andre">Andre</option>
-                                        <option value="Adrian">Adrian</option>
-                                        <option value="Salma">Salma</option>
+                                    <label for="category" class="form-label">Category <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select" id="category" name="category" required>
+                                        <option value="">Pilih Kategori</option>
+                                        <option value="X">X</option>
+                                        <option value="XI">XI</option>
+                                        <option value="XII">XII</option>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="students" class="form-label">Siswa <span class="text-danger">*</span></label>
+                                <select class="form-select select2" id="students" name="students[]" multiple="multiple"
+                                    required>
+                                    @foreach($students as $student)
+                                        <option value="{{ $student->id }}">{{ $student->full_name }}</option>
+                                    @endforeach
+                                </select>
+                                <small class="text-muted">Pilih satu atau lebih siswa dari daftar.</small>
                             </div>
                         </div>
                     </div>
@@ -288,12 +259,48 @@
     </script>
 
     <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @elseif (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: '{{ session('error') }}',
+                showConfirmButton: true
+            });
+        @elseif (session('warning'))
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan',
+                html: `{!! nl2br(e(session('warning'))) !!}`,
+                confirmButtonText: 'OK'
+            });
+        @endif
+    </script>
+
+    <script>
         document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(btn => {
             btn.addEventListener('click', function () {
                 const chevron = this.querySelector('.chevron');
                 const target = document.querySelector(this.dataset.bsTarget);
                 target.addEventListener('shown.bs.collapse', () => chevron.innerHTML = '\u25B2');
                 target.addEventListener('hidden.bs.collapse', () => chevron.innerHTML = '\u25BC');
+            });
+        });
+    </script>
+
+    {{-- Select2 --}}
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                placeholder: "Pilih siswa...",
+                width: '100%'  // agar sesuai dengan form-control
             });
         });
     </script>

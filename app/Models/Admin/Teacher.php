@@ -4,14 +4,13 @@ namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
-class Student extends Model
+class Teacher extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'nis',
+        'nip',
         'full_name',
         'gender',
         'birth_place',
@@ -21,19 +20,12 @@ class Student extends Model
         'email',
         'religion',
         'enrollment_year',
-        'guardian_name',
-        'guardian_phone',
         'photo',
         'status',
-        'user_id',
+        'user_id'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function class()
+    public function schoolClass()
     {
         return $this->belongsTo(SchoolClass::class, 'class_id');
     }

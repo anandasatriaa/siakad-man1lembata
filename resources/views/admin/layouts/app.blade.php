@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard')</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -17,6 +18,9 @@
 
     {{-- DATATABLE --}}
     <link rel="stylesheet" href="{{ asset('assets/vendors/simple-datatables/style.css') }}">
+
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     @stack('css')
 </head>
@@ -32,8 +36,7 @@
                                     srcset=""></a>
                         </div>
                         <div class="toggler">
-                            <a href="#" class="sidebar-hide d-xl-none d-block"><i
-                                    class="bi bi-x bi-middle"></i></a>
+                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
                         </div>
                     </div>
                 </div>
@@ -47,7 +50,7 @@
                                 <span>Dashboard</span>
                             </a>
                         </li>
-                        
+
                         <li class="sidebar-item {{ request()->routeIs('admin.student.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.student.index') }}" class='sidebar-link'>
                                 <i class="bi bi-people-fill"></i>
@@ -76,10 +79,24 @@
                             </a>
                         </li>
 
-                        <li class="sidebar-item ">
-                            <a href="index.html" class='sidebar-link'>
+                        <li class="sidebar-item {{ request()->routeIs('admin.schedule.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.schedule.index') }}" class='sidebar-link'>
                                 <i class="bi bi-calendar-event-fill"></i>
                                 <span>Jadwal</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->routeIs('admin.announcement.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.announcement.index') }}" class='sidebar-link'>
+                                <i class="bi bi-megaphone-fill"></i>
+                                <span>Pengumuman</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item {{ request()->routeIs('admin.grade.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.grade.index') }}" class='sidebar-link'>
+                                <i class="bi bi-award-fill"></i>
+                                <span>Nilai</span>
                             </a>
                         </li>
 
@@ -133,16 +150,16 @@
                                         <h6 class="dropdown-header">Hello, John!</h6>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#"><i
-                                                class="icon-mid bi bi-person me-2"></i> My Profile</a>
+                                        <a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i> My
+                                            Profile</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#"><i
-                                                class="icon-mid bi bi-gear me-2"></i> Settings</a>
+                                        <a class="dropdown-item" href="#"><i class="icon-mid bi bi-gear me-2"></i>
+                                            Settings</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#"><i
-                                                class="icon-mid bi bi-wallet me-2"></i> Wallet</a>
+                                        <a class="dropdown-item" href="#"><i class="icon-mid bi bi-wallet me-2"></i>
+                                            Wallet</a>
                                     </li>
                                     <li>
                                         <hr class="dropdown-divider" />
@@ -175,6 +192,9 @@
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <script src="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/apexcharts/apexcharts.js') }}"></script>
@@ -183,6 +203,12 @@
 
     {{-- DATATABLE --}}
     <script src="{{ asset('assets/vendors/simple-datatables/simple-datatables.js') }}"></script>
+
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @stack('js')
 </body>
