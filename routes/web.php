@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AdminCourseController;
 use App\Http\Controllers\Admin\AdminAnnouncementController;
 use App\Http\Controllers\Admin\AdminGradeController;
 use App\Http\Controllers\Admin\AdminScheduleController;
+use App\Http\Controllers\Admin\AdminAccountController;
 
 // Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
@@ -65,6 +66,13 @@ Route::prefix('admin')->middleware(['auth', 'level:1'])->group(function () {
     Route::get('/schedule/edit/{id}', [AdminScheduleController::class, 'edit'])->name('admin.schedule.edit');
     Route::post('/schedule/update/{id}', [AdminScheduleController::class, 'update'])->name('admin.schedule.update');
     Route::post('/schedule/destroy/{id}', [AdminScheduleController::class, 'destroy'])->name('admin.schedule.destroy');
+
+    Route::get('/account', [AdminAccountController::class, 'index'])->name('admin.account.index');
+    Route::post('/account/store', [AdminAccountController::class, 'store'])->name('admin.account.store');
+    Route::get('/account/edit/{id}', [AdminAccountController::class, 'edit'])->name('admin.account.edit');
+    Route::post('/account/update/{id}', [AdminAccountController::class, 'update'])->name('admin.account.update');
+    Route::post('/account/destroy/{id}', [AdminAccountController::class, 'destroy'])->name('admin.account.destroy');
+    Route::get('/account/{user}/reset-password', [AdminAccountController::class, 'resetPassword'])->name('admin.account.reset');
 });
 
 // Kesiswaan routes

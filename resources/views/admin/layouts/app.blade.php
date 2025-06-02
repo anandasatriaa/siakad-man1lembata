@@ -102,8 +102,8 @@
 
                         <li class="sidebar-title">Setting</li>
 
-                        <li class="sidebar-item ">
-                            <a href="index.html" class='sidebar-link'>
+                        <li class="sidebar-item {{ request()->routeIs('admin.account.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.account.index') }}" class='sidebar-link'>
                                 <i class="bi bi-shield-lock-fill"></i>
                                 <span>Akun & Password</span>
                             </a>
