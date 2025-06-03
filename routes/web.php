@@ -12,6 +12,11 @@ use App\Http\Controllers\Admin\AdminGradeController;
 use App\Http\Controllers\Admin\AdminScheduleController;
 use App\Http\Controllers\Admin\AdminAccountController;
 
+use App\Http\Controllers\Teacher\TeacherDashboardController;
+use App\Http\Controllers\Teacher\TeacherMaterialController;
+use App\Http\Controllers\Teacher\TeacherClassController;
+use App\Http\Controllers\Teacher\TeacherGradeController;
+
 // Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -117,9 +122,18 @@ Route::prefix('kesiswaan')
 
 // Guru routes
 Route::prefix('guru')->middleware(['auth', 'level:3'])->group(function () {
-    Route::get('/dashboard', function () {
-        return 'Dashboard Guru';
-    })->name('guru.dashboard');
+    Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+
+    Route::get('/material', [TeacherMaterialController::class, 'index'])->name('teacher.material.index');
+    Route::post('/material/store', [TeacherMaterialController::class, 'store'])->name('teacher.material.store');
+    Route::post('/material/update/{id}', [TeacherMaterialController::class, 'update'])->name('teacher.material.update');
+    Route::post('/material/destroy/{id}', [TeacherMaterialController::class, 'destroy'])->name('teacher.material.destroy');
+
+    Route::get('/class', [TeacherClassController::class, 'index'])->name('teacher.class.index');
+
+    Route::get('/grade', [TeacherGradeController::class, 'index'])->name('teacher.grade.index');
+    Route::get('/grade/form', [TeacherGradeController::class, 'form'])->name('teacher.grade.form');
+    Route::post('/grade/store', [TeacherGradeController::class, 'store'])->name('teacher.grade.store');
 });
 
 // Siswa routes

@@ -4,6 +4,7 @@ namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Teacher extends Model
 {
@@ -28,5 +29,10 @@ class Teacher extends Model
     public function schoolClass()
     {
         return $this->belongsTo(SchoolClass::class, 'class_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
