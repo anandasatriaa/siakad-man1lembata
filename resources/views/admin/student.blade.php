@@ -3,14 +3,12 @@
 @section('title', 'Data Siswa')
 
 @push('css')
-
     <style>
         .avatar img {
             border-radius: 50%;
             object-fit: cover;
         }
     </style>
-
 @endpush
 
 @section('content')
@@ -22,11 +20,13 @@
                     <p class="text-subtitle text-muted">Semua informasi mengenai data siswa</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first text-md-end text-start mb-2 mb-md-0">
-                    <button type="button" class="btn btn-primary rounded-pill d-inline-flex align-items-center"
-                        data-bs-toggle="modal" data-bs-target="#tambahSiswaModal">
-                        <i class="bi bi-plus-circle me-2"></i>
-                        <span>Tambah Siswa</span>
-                    </button>
+                    @if (auth()->user()->level == 1)
+                        <button type="button" class="btn btn-primary rounded-pill d-inline-flex align-items-center"
+                            data-bs-toggle="modal" data-bs-target="#tambahSiswaModal">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            <span>Tambah Siswa</span>
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -65,7 +65,8 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="avatar avatar-md me-3">
                                                     @if ($student->photo)
-                                                        <img src="{{ asset('storage/' . $student->photo) }}" alt="Foto Profil">
+                                                        <img src="{{ asset('storage/' . $student->photo) }}"
+                                                            alt="Foto Profil">
                                                     @else
                                                         <img src="{{ asset('assets/images/faces/default.jpg') }}"
                                                             alt="Foto Default">
@@ -93,26 +94,35 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="#" class="btn btn-sm btn-warning edit-btn" data-id="{{ $student->id }}"
-                                                    data-nis="{{ $student->nis }}" data-full_name="{{ $student->full_name }}"
-                                                    data-gender="{{ $student->gender }}"
-                                                    data-birth_place="{{ $student->birth_place }}"
-                                                    data-birth_date="{{ $student->birth_date }}"
-                                                    data-address="{{ $student->address }}" data-phone="{{ $student->phone }}"
-                                                    data-email="{{ $student->email }}" data-religion="{{ $student->religion }}"
-                                                    data-enrollment_year="{{ $student->enrollment_year }}"
-                                                    data-status="{{ $student->status }}"
-                                                    data-guardian_name="{{ $student->guardian_name }}"
-                                                    data-guardian_phone="{{ $student->guardian_phone }}"
-                                                    data-photo="{{ asset('storage/' . $student->photo) }}"
-                                                    data-url="{{ route('admin.student.update', $student->id) }}">
-                                                    Edit
-                                                </a>
-                                                <button type="button" class="btn btn-sm btn-danger ms-2 delete-btn"
-                                                    data-id="{{ $student->id }}"
-                                                    data-url="{{ route('admin.student.destroy', $student->id) }}">
-                                                    Hapus
-                                                </button>
+                                                {{-- Hanya render tombol Edit & Hapus jika level == 1 --}}
+                                                @if (auth()->user()->level == 1)
+                                                    <a href="#" class="btn btn-sm btn-warning edit-btn"
+                                                        data-id="{{ $student->id }}" data-nis="{{ $student->nis }}"
+                                                        data-full_name="{{ $student->full_name }}"
+                                                        data-gender="{{ $student->gender }}"
+                                                        data-birth_place="{{ $student->birth_place }}"
+                                                        data-birth_date="{{ $student->birth_date }}"
+                                                        data-address="{{ $student->address }}"
+                                                        data-phone="{{ $student->phone }}"
+                                                        data-email="{{ $student->email }}"
+                                                        data-religion="{{ $student->religion }}"
+                                                        data-enrollment_year="{{ $student->enrollment_year }}"
+                                                        data-status="{{ $student->status }}"
+                                                        data-guardian_name="{{ $student->guardian_name }}"
+                                                        data-guardian_phone="{{ $student->guardian_phone }}"
+                                                        data-photo="{{ asset('storage/' . $student->photo) }}"
+                                                        data-url="{{ route('admin.student.update', $student->id) }}">
+                                                        Edit
+                                                    </a>
+                                                    <button type="button" class="btn btn-sm btn-danger ms-2 delete-btn"
+                                                        data-id="{{ $student->id }}"
+                                                        data-url="{{ route('admin.student.destroy', $student->id) }}">
+                                                        Hapus
+                                                    </button>
+                                                @else
+                                                    {{-- Jika level != 1, bisa ditampilkan teks kosong atau “—” --}}
+                                                    <span class="text-muted">—</span>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -141,7 +151,8 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="nis" class="form-label">NIS <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nis" name="nis" maxlength="20" required>
+                                    <input type="text" class="form-control" id="nis" name="nis" maxlength="20"
+                                        required>
                                 </div>
 
                                 <div class="mb-3">
@@ -176,7 +187,8 @@
                                     <div class="col-md-6">
                                         <label for="birth_date" class="form-label">Tanggal Lahir <span
                                                 class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" id="birth_date" name="birth_date" required>
+                                        <input type="date" class="form-control" id="birth_date" name="birth_date"
+                                            required>
                                     </div>
                                 </div>
 
@@ -217,8 +229,9 @@
                                 <div class="mb-3">
                                     <label for="enrollment_year" class="form-label">Tahun Masuk <span
                                             class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="enrollment_year" name="enrollment_year"
-                                        min="2000" max="2099" step="1" value="<?= date('Y') ?>" required>
+                                    <input type="number" class="form-control" id="enrollment_year"
+                                        name="enrollment_year" min="2000" max="2099" step="1"
+                                        value="<?= date('Y') ?>" required>
                                 </div>
 
                                 <div class="mb-3">
@@ -247,12 +260,12 @@
 
                                 <div class="mb-3">
                                     <label for="photo" class="form-label">Foto Profil</label>
-                                    <input class="form-control" type="file" id="photo" name="photo" accept="image/*"
-                                        onchange="previewPhoto(event)">
+                                    <input class="form-control" type="file" id="photo" name="photo"
+                                        accept="image/*" onchange="previewPhoto(event)">
                                     <small class="text-muted">Format: JPG, PNG (Maks 2MB)</small>
                                     <div class="mt-1">
-                                        <img id="photo-preview" src="#" alt="Preview Foto" class="img-thumbnail d-none"
-                                            style="max-width: 100px;">
+                                        <img id="photo-preview" src="#" alt="Preview Foto"
+                                            class="img-thumbnail d-none" style="max-width: 100px;">
                                     </div>
                                 </div>
                             </div>
@@ -268,7 +281,8 @@
     </div>
 
     <!-- Modal Edit -->
-    <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form id="form-edit-student" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -284,25 +298,27 @@
                             <div class="col-md-6">
                                 <input type="hidden" id="edit_id">
                                 <div class="mb-3">
-                                    <label for="edit_nis" class="form-label">NIS <span class="text-danger">*</span></label>
+                                    <label for="edit_nis" class="form-label">NIS <span
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="edit_nis" name="nis" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="edit_full_name" class="form-label">Nama Lengkap <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="edit_full_name" name="full_name" required>
+                                    <input type="text" class="form-control" id="edit_full_name" name="full_name"
+                                        required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
                                     <div class="d-flex gap-3">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="gender" id="edit_genderM"
-                                                value="M" required>
+                                            <input class="form-check-input" type="radio" name="gender"
+                                                id="edit_genderM" value="M" required>
                                             <label class="form-check-label" for="edit_genderM">Laki-laki</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="gender" id="edit_genderF"
-                                                value="F">
+                                            <input class="form-check-input" type="radio" name="gender"
+                                                id="edit_genderF" value="F">
                                             <label class="form-check-label" for="edit_genderF">Perempuan</label>
                                         </div>
                                     </div>
@@ -311,14 +327,14 @@
                                     <div class="col-md-6">
                                         <label for="edit_birth_place" class="form-label">Tempat Lahir <span
                                                 class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="edit_birth_place" name="birth_place"
-                                            required>
+                                        <input type="text" class="form-control" id="edit_birth_place"
+                                            name="birth_place" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="edit_birth_date" class="form-label">Tanggal Lahir <span
                                                 class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" id="edit_birth_date" name="birth_date"
-                                            required>
+                                        <input type="date" class="form-control" id="edit_birth_date"
+                                            name="birth_date" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -333,8 +349,7 @@
                                 <div class="mb-3">
                                     <label for="edit_address" class="form-label">Alamat <span
                                             class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="edit_address" name="address" rows="3"
-                                        required></textarea>
+                                    <textarea class="form-control" id="edit_address" name="address" rows="3" required></textarea>
                                 </div>
                             </div>
                             <!-- Kolom Kanan -->
@@ -370,18 +385,19 @@
                                 <div class="mb-3">
                                     <label for="edit_guardian_name" class="form-label">Nama Wali <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="edit_guardian_name" name="guardian_name"
-                                        required>
+                                    <input type="text" class="form-control" id="edit_guardian_name"
+                                        name="guardian_name" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="edit_guardian_phone" class="form-label">Telepon Wali <span
                                             class="text-danger">*</span></label>
-                                    <input type="tel" class="form-control" id="edit_guardian_phone" name="guardian_phone"
-                                        required>
+                                    <input type="tel" class="form-control" id="edit_guardian_phone"
+                                        name="guardian_phone" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="edit_photo" class="form-label">Foto Profil</label>
-                                    <input class="form-control" type="file" id="edit_photo" name="photo" accept="image/*">
+                                    <input class="form-control" type="file" id="edit_photo" name="photo"
+                                        accept="image/*">
                                     <small class="text-muted">Format: JPG, PNG (Maks 2MB)</small>
                                     <br>
                                     <img id="edit_photo_preview" src="" alt="Preview Foto" class="mt-2 rounded"
@@ -400,7 +416,7 @@
 @endsection
 
 @push('js')
-    @if(session('success'))
+    @if (session('success'))
         <script>
             Swal.fire({
                 icon: 'success',
@@ -432,7 +448,7 @@
         </script>
     @endif
 
-    @if(session('error'))
+    @if (session('error'))
         <script>
             Swal.fire({
                 icon: 'error',
@@ -457,7 +473,7 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
 
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     preview.src = e.target.result;
                     preview.classList.remove('d-none');
                 };
@@ -470,7 +486,7 @@
     {{-- MODAL EDIT --}}
     <script>
         document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const form = document.getElementById('form-edit-student');
                 const photoPreview = document.getElementById('edit_photo_preview');
 
@@ -508,11 +524,11 @@
     </script>
 
     <script>
-        document.getElementById('edit_photo').addEventListener('change', function (event) {
+        document.getElementById('edit_photo').addEventListener('change', function(event) {
             const photoPreview = document.getElementById('edit_photo_preview');
             if (event.target.files && event.target.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     photoPreview.src = e.target.result;
                     photoPreview.style.display = 'block';
                 }
@@ -523,14 +539,14 @@
 
     {{-- HAPUS DATA --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const deleteButtons = document.querySelectorAll('.delete-btn');
 
             deleteButtons.forEach(btn => {
-                btn.addEventListener('click', function () {
+                btn.addEventListener('click', function() {
                     const studentId = this.getAttribute('data-id');
                     const deleteUrl = this.getAttribute('data-url');
-                    
+
                     Swal.fire({
                         title: 'Yakin ingin menghapus?',
                         text: "Data siswa dan foto akan dihapus permanen!",
@@ -543,24 +559,29 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             fetch(deleteUrl, {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                                    'Accept': 'application/json'
-                                }
-                            })
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': document.querySelector(
+                                            'meta[name="csrf-token"]').getAttribute(
+                                            'content'),
+                                        'Accept': 'application/json'
+                                    }
+                                })
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.success) {
-                                        Swal.fire('Berhasil!', data.message, 'success').then(() => {
-                                            location.reload(); // reload halaman
-                                        });
+                                        Swal.fire('Berhasil!', data.message, 'success')
+                                            .then(() => {
+                                                location.reload(); // reload halaman
+                                            });
                                     } else {
                                         Swal.fire('Gagal', data.message, 'error');
                                     }
                                 })
                                 .catch(() => {
-                                    Swal.fire('Gagal', 'Terjadi kesalahan saat menghubungi server.', 'error');
+                                    Swal.fire('Gagal',
+                                        'Terjadi kesalahan saat menghubungi server.',
+                                        'error');
                                 });
                         }
                     });

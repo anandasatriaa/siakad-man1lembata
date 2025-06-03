@@ -3,14 +3,12 @@
 @section('title', 'Mata Pelajaran')
 
 @push('css')
-
     <style>
         .avatar img {
             border-radius: 50%;
             object-fit: cover;
         }
     </style>
-
 @endpush
 
 @section('content')
@@ -22,11 +20,13 @@
                     <p class="text-subtitle text-muted">Semua informasi mengenai mata pelajaran</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first text-md-end text-start mb-2 mb-md-0">
-                    <button type="button" class="btn btn-primary rounded-pill d-inline-flex align-items-center"
-                        data-bs-toggle="modal" data-bs-target="#modalAdd">
-                        <i class="bi bi-plus-circle me-2"></i>
-                        <span>Tambah Mata Pelajaran</span>
-                    </button>
+                    @if (auth()->user()->level == 1)
+                        <button type="button" class="btn btn-primary rounded-pill d-inline-flex align-items-center"
+                            data-bs-toggle="modal" data-bs-target="#modalAdd">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            <span>Tambah Mata Pelajaran</span>
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -44,21 +44,26 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <strong>{{ $course->name }}</strong>
-                                            @if ($course->code) <span class="text-muted">({{ $course->code }})</span> @endif
+                                            @if ($course->code)
+                                                <span class="text-muted">({{ $course->code }})</span>
+                                            @endif
                                         </div>
-                                        <button class="btn btn-sm btn-warning btn-edit" data-id="{{ $course->id }}"
-                                            data-name="{{ $course->name }}" data-code="{{ $course->code }}"
-                                            data-grade="{{ $course->grade }}"
-                                            data-route="{{ route('admin.course.update', $course->id) }}" data-bs-toggle="modal"
-                                            data-bs-target="#modalEdit">
-                                            Edit
-                                        </button>
-                                        <button class="btn btn-sm btn-danger btn-delete" data-id="{{ $course->id }}">Hapus</button>
-                                        <form id="delete-form-{{ $course->id }}"
-                                            action="{{ route('admin.course.destroy', $course->id) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                        </form>
+                                        @if (auth()->user()->level == 1)
+                                            <button class="btn btn-sm btn-warning btn-edit" data-id="{{ $course->id }}"
+                                                data-name="{{ $course->name }}" data-code="{{ $course->code }}"
+                                                data-grade="{{ $course->grade }}"
+                                                data-route="{{ route('admin.course.update', $course->id) }}"
+                                                data-bs-toggle="modal" data-bs-target="#modalEdit">
+                                                Edit
+                                            </button>
+                                            <button class="btn btn-sm btn-danger btn-delete"
+                                                data-id="{{ $course->id }}">Hapus</button>
+                                            <form id="delete-form-{{ $course->id }}"
+                                                action="{{ route('admin.course.destroy', $course->id) }}" method="POST"
+                                                style="display: none;">
+                                                @csrf
+                                            </form>
+                                        @endif
                                     </li>
                                 @endforeach
                             </ul>
@@ -178,7 +183,7 @@
 
     <script>
         document.querySelectorAll('.btn-delete').forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const id = this.dataset.id;
                 Swal.fire({
                     title: 'Yakin ingin menghapus?',
@@ -199,7 +204,7 @@
 
     <script>
         document.querySelectorAll('.btn-edit').forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const name = this.dataset.name;
                 const code = this.dataset.code;
                 const grade = this.dataset.grade;

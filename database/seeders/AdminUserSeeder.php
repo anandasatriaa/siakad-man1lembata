@@ -14,12 +14,23 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Admin
         User::updateOrCreate(
             ['email' => 'admin@example.com'],
             [
                 'name' => 'Admin',
                 'password' => Hash::make('admin123'), // Password terenkripsi
                 'level' => '1',
+            ]
+        );
+
+        // Kesiswaan
+        User::updateOrCreate(
+            ['email' => 'kesiswaan@example.com'],
+            [
+                'name' => 'Kesiswaan',
+                'password' => Hash::make('kesiswaan123'), // Password terenkripsi
+                'level' => '2',
             ]
         );
     }

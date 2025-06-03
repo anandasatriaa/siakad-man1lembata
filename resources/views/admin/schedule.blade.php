@@ -3,9 +3,6 @@
 @section('title', 'Jadwal Pelajaran')
 
 @push('css')
-
-
-
 @endpush
 
 @section('content')
@@ -17,11 +14,13 @@
                     <p class="text-subtitle text-muted">Semua informasi mengenai Jadwal Pelajaran</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first text-md-end text-start mb-2 mb-md-0">
-                    <button type="button" class="btn btn-primary rounded-pill d-inline-flex align-items-center"
-                        data-bs-toggle="modal" data-bs-target="#addScheduleModal">
-                        <i class="bi bi-plus-circle me-2"></i>
-                        <span>Tambah Jadwal</span>
-                    </button>
+                    @if (auth()->user()->level == 1)
+                        <button type="button" class="btn btn-primary rounded-pill d-inline-flex align-items-center"
+                            data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            <span>Tambah Jadwal</span>
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -57,7 +56,7 @@
                         {{-- ==================================== --}}
                         <div class="tab-pane fade show active" id="content-x" role="tabpanel" aria-labelledby="tab-x">
                             <div class="list-group">
-                                @foreach($classes->where('category', 'X') as $class)
+                                @foreach ($classes->where('category', 'X') as $class)
                                     {{-- Tombol Collapse untuk tiap kelas X --}}
                                     <button
                                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
@@ -72,36 +71,37 @@
                                         <div class="card card-body mt-2">
                                             @php
                                                 // Hitung jumlah jadwal terbanyak per hari di kelas ini
-                                                $maxPerDay = $class->schedules
-                                                    ->groupBy('day')
-                                                    ->map(fn($group) => $group->count())
-                                                    ->max() ?? 0;
+                                                $maxPerDay =
+                                                    $class->schedules
+                                                        ->groupBy('day')
+                                                        ->map(fn($group) => $group->count())
+                                                        ->max() ?? 0;
                                             @endphp
 
                                             <table class="table table-bordered text-center mb-0">
                                                 <thead class="table-light">
                                                     <tr>
                                                         <th>Hari</th>
-                                                        @for($i = 1; $i <= $maxPerDay; $i++)
+                                                        @for ($i = 1; $i <= $maxPerDay; $i++)
                                                             <th>Jadwal {{ $i }}</th>
                                                         @endfor
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($days as $day)
+                                                    @foreach ($days as $day)
                                                         @php
                                                             // Kumpulkan semua jadwal untuk hari ini
                                                             $daySchedules = $class->schedules
                                                                 ->where('day', $day)
                                                                 ->sortBy('start_time')
                                                                 ->values();
-                                                          @endphp
+                                                        @endphp
 
                                                         {{-- Jika hari ini sama sekali tidak ada jadwal --}}
-                                                        @if($daySchedules->isEmpty())
+                                                        @if ($daySchedules->isEmpty())
                                                             <tr>
                                                                 <td>{{ $day }}</td>
-                                                                @for($j = 0; $j < $maxPerDay; $j++)
+                                                                @for ($j = 0; $j < $maxPerDay; $j++)
                                                                     <td><em>Istirahat</em></td>
                                                                 @endfor
                                                             </tr>
@@ -109,9 +109,9 @@
                                                             {{-- Jika ada satu atau lebih jadwal --}}
                                                             <tr>
                                                                 <td>{{ $day }}</td>
-                                                                @for($j = 0; $j < $maxPerDay; $j++)
+                                                                @for ($j = 0; $j < $maxPerDay; $j++)
                                                                     <td>
-                                                                        @if(isset($daySchedules[$j]))
+                                                                        @if (isset($daySchedules[$j]))
                                                                             @php $sch = $daySchedules[$j]; @endphp
 
                                                                             {{-- Tampilkan Jam Mulai – Jam Selesai di dalam “Jadwal $j+1” --}}
@@ -122,7 +122,7 @@
 
                                                                             {{-- Tampilkan Mata Pelajaran (atau “Istirahat” jika course = null)
                                                                             --}}
-                                                                            @if($sch->course)
+                                                                            @if ($sch->course)
                                                                                 <strong>{{ $sch->course->name }}</strong>
                                                                             @else
                                                                                 <em>Istirahat</em>
@@ -130,7 +130,7 @@
                                                                             <br>
 
                                                                             {{-- Tampilkan Nama Guru (jika ada) --}}
-                                                                            @if($sch->teacher)
+                                                                            @if ($sch->teacher)
                                                                                 <small>{{ $sch->teacher->full_name }}</small>
                                                                             @endif
                                                                         @else
@@ -155,7 +155,7 @@
                         {{-- ==================================== --}}
                         <div class="tab-pane fade" id="content-xi" role="tabpanel" aria-labelledby="tab-xi">
                             <div class="list-group">
-                                @foreach($classes->where('category', 'XI') as $class)
+                                @foreach ($classes->where('category', 'XI') as $class)
                                     <button
                                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
                                         data-bs-toggle="collapse" data-bs-target="#jadwal-{{ $class->id }}"
@@ -167,55 +167,56 @@
                                     <div class="collapse" id="jadwal-{{ $class->id }}">
                                         <div class="card card-body mt-2">
                                             @php
-                                                $maxPerDay = $class->schedules
-                                                    ->groupBy('day')
-                                                    ->map(fn($group) => $group->count())
-                                                    ->max() ?? 0;
+                                                $maxPerDay =
+                                                    $class->schedules
+                                                        ->groupBy('day')
+                                                        ->map(fn($group) => $group->count())
+                                                        ->max() ?? 0;
                                             @endphp
 
                                             <table class="table table-bordered text-center mb-0">
                                                 <thead class="table-light">
                                                     <tr>
                                                         <th>Hari</th>
-                                                        @for($i = 1; $i <= $maxPerDay; $i++)
+                                                        @for ($i = 1; $i <= $maxPerDay; $i++)
                                                             <th>Jadwal {{ $i }}</th>
                                                         @endfor
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($days as $day)
+                                                    @foreach ($days as $day)
                                                         @php
                                                             $daySchedules = $class->schedules
                                                                 ->where('day', $day)
                                                                 ->sortBy('start_time')
                                                                 ->values();
-                                                          @endphp
+                                                        @endphp
 
-                                                        @if($daySchedules->isEmpty())
+                                                        @if ($daySchedules->isEmpty())
                                                             <tr>
                                                                 <td>{{ $day }}</td>
-                                                                @for($j = 0; $j < $maxPerDay; $j++)
+                                                                @for ($j = 0; $j < $maxPerDay; $j++)
                                                                     <td><em>Istirahat</em></td>
                                                                 @endfor
                                                             </tr>
                                                         @else
                                                             <tr>
                                                                 <td>{{ $day }}</td>
-                                                                @for($j = 0; $j < $maxPerDay; $j++)
+                                                                @for ($j = 0; $j < $maxPerDay; $j++)
                                                                     <td>
-                                                                        @if(isset($daySchedules[$j]))
+                                                                        @if (isset($daySchedules[$j]))
                                                                             @php $sch = $daySchedules[$j]; @endphp
                                                                             {{ \Carbon\Carbon::parse($sch->start_time)->format('H:i') }}
                                                                             -
                                                                             {{ \Carbon\Carbon::parse($sch->end_time)->format('H:i') }}
                                                                             <br>
-                                                                            @if($sch->course)
+                                                                            @if ($sch->course)
                                                                                 <strong>{{ $sch->course->name }}</strong>
                                                                             @else
                                                                                 <em>Istirahat</em>
                                                                             @endif
                                                                             <br>
-                                                                            @if($sch->teacher)
+                                                                            @if ($sch->teacher)
                                                                                 <small>{{ $sch->teacher->full_name }}</small>
                                                                             @endif
                                                                         @else
@@ -239,7 +240,7 @@
                         {{-- ==================================== --}}
                         <div class="tab-pane fade" id="content-xii" role="tabpanel" aria-labelledby="tab-xii">
                             <div class="list-group">
-                                @foreach($classes->where('category', 'XII') as $class)
+                                @foreach ($classes->where('category', 'XII') as $class)
                                     <button
                                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
                                         data-bs-toggle="collapse" data-bs-target="#jadwal-{{ $class->id }}"
@@ -251,55 +252,56 @@
                                     <div class="collapse" id="jadwal-{{ $class->id }}">
                                         <div class="card card-body mt-2">
                                             @php
-                                                $maxPerDay = $class->schedules
-                                                    ->groupBy('day')
-                                                    ->map(fn($group) => $group->count())
-                                                    ->max() ?? 0;
+                                                $maxPerDay =
+                                                    $class->schedules
+                                                        ->groupBy('day')
+                                                        ->map(fn($group) => $group->count())
+                                                        ->max() ?? 0;
                                             @endphp
 
                                             <table class="table table-bordered text-center mb-0">
                                                 <thead class="table-light">
                                                     <tr>
                                                         <th>Hari</th>
-                                                        @for($i = 1; $i <= $maxPerDay; $i++)
+                                                        @for ($i = 1; $i <= $maxPerDay; $i++)
                                                             <th>Jadwal {{ $i }}</th>
                                                         @endfor
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($days as $day)
+                                                    @foreach ($days as $day)
                                                         @php
                                                             $daySchedules = $class->schedules
                                                                 ->where('day', $day)
                                                                 ->sortBy('start_time')
                                                                 ->values();
-                                                          @endphp
+                                                        @endphp
 
-                                                        @if($daySchedules->isEmpty())
+                                                        @if ($daySchedules->isEmpty())
                                                             <tr>
                                                                 <td>{{ $day }}</td>
-                                                                @for($j = 0; $j < $maxPerDay; $j++)
+                                                                @for ($j = 0; $j < $maxPerDay; $j++)
                                                                     <td><em>Istirahat</em></td>
                                                                 @endfor
                                                             </tr>
                                                         @else
                                                             <tr>
                                                                 <td>{{ $day }}</td>
-                                                                @for($j = 0; $j < $maxPerDay; $j++)
+                                                                @for ($j = 0; $j < $maxPerDay; $j++)
                                                                     <td>
-                                                                        @if(isset($daySchedules[$j]))
+                                                                        @if (isset($daySchedules[$j]))
                                                                             @php $sch = $daySchedules[$j]; @endphp
                                                                             {{ \Carbon\Carbon::parse($sch->start_time)->format('H:i') }}
                                                                             -
                                                                             {{ \Carbon\Carbon::parse($sch->end_time)->format('H:i') }}
                                                                             <br>
-                                                                            @if($sch->course)
+                                                                            @if ($sch->course)
                                                                                 <strong>{{ $sch->course->name }}</strong>
                                                                             @else
                                                                                 <em>Istirahat</em>
                                                                             @endif
                                                                             <br>
-                                                                            @if($sch->teacher)
+                                                                            @if ($sch->teacher)
                                                                                 <small>{{ $sch->teacher->full_name }}</small>
                                                                             @endif
                                                                         @else
@@ -324,7 +326,8 @@
     </div>
 
     <!-- Modal Tambah Jadwal -->
-    <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <form method="POST" action="{{ route('admin.schedule.store') }}">
@@ -341,8 +344,9 @@
                             <label for="class_id" class="form-label">Kelas</label>
                             <select name="class_id" id="class_id" class="form-select" required>
                                 <option value="" selected disabled>-- Pilih Kelas --</option>
-                                @foreach($classes as $c)
-                                    <option value="{{ $c->id }}">{{ $c->name }} ({{ $c->category }})</option>
+                                @foreach ($classes as $c)
+                                    <option value="{{ $c->id }}">{{ $c->name }} ({{ $c->category }})
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -372,7 +376,7 @@
                                             <td class="align-middle">
                                                 <select name="days[]" class="form-select form-select-sm" required>
                                                     <option value="" selected disabled>-- Pilih Hari --</option>
-                                                    @foreach($days as $d)
+                                                    @foreach ($days as $d)
                                                         <option value="{{ $d }}">{{ $d }}</option>
                                                     @endforeach
                                                 </select>
@@ -381,11 +385,13 @@
                                             {{-- Mata Pelajaran (termasuk opsi Istirahat) --}}
                                             <td class="align-middle">
                                                 <select name="course_ids[]" class="form-select form-select-sm" required>
-                                                    <option value="" selected disabled>-- Pilih Mata Pelajaran --</option>
+                                                    <option value="" selected disabled>-- Pilih Mata Pelajaran --
+                                                    </option>
                                                     <option value="istirahat">Istirahat</option>
-                                                    @foreach($courses as $course)
+                                                    @foreach ($courses as $course)
                                                         <option value="{{ $course->id }}">
-                                                            {{ $course->name }} ({{ $course->grade }}) – {{ $course->code }}
+                                                            {{ $course->name }} ({{ $course->grade }}) –
+                                                            {{ $course->code }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -396,8 +402,9 @@
                                                 <select name="teacher_ids[]" class="form-select form-select-sm" required>
                                                     <option value="" selected disabled>-- Pilih Guru --</option>
                                                     <option value="istirahat">Istirahat</option>
-                                                    @foreach($teachers as $t)
-                                                        <option value="{{ $t->id }}">{{ $t->full_name }} ({{ $t->nip }})
+                                                    @foreach ($teachers as $t)
+                                                        <option value="{{ $t->id }}">{{ $t->full_name }}
+                                                            ({{ $t->nip }})
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -405,14 +412,14 @@
 
                                             {{-- Jam Mulai --}}
                                             <td class="align-middle">
-                                                <input type="time" name="start_times[]" class="form-control form-control-sm"
-                                                    required>
+                                                <input type="time" name="start_times[]"
+                                                    class="form-control form-control-sm" required>
                                             </td>
 
                                             {{-- Jam Selesai --}}
                                             <td class="align-middle">
-                                                <input type="time" name="end_times[]" class="form-control form-control-sm"
-                                                    required>
+                                                <input type="time" name="end_times[]"
+                                                    class="form-control form-control-sm" required>
                                             </td>
 
                                             {{-- Tombol Hapus (tidak menghapus baris pertama jika hanya satu tersisa) --}}
@@ -474,7 +481,7 @@
     @endif
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const tableBody = document.querySelector('#schedule-table tbody');
             const btnAdd = document.getElementById('btn-add-row');
 
@@ -495,7 +502,7 @@
             }
 
             // Tambah baris saat tombol ditekan
-            btnAdd.addEventListener('click', function () {
+            btnAdd.addEventListener('click', function() {
                 const newRow = createNewRow();
                 tableBody.appendChild(newRow);
                 updateRemoveButtons();
@@ -504,7 +511,7 @@
             // Hapus baris jika tombol Hapus pada baris ditekan
             function updateRemoveButtons() {
                 tableBody.querySelectorAll('.btn-remove-row').forEach(btn => {
-                    btn.onclick = function () {
+                    btn.onclick = function() {
                         const currentRows = tableBody.querySelectorAll('tr').length;
                         if (currentRows > 1) {
                             this.closest('tr').remove();

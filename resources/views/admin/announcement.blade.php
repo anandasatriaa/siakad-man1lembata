@@ -3,14 +3,12 @@
 @section('title', 'Pengumuman')
 
 @push('css')
-
     <style>
         .avatar img {
             border-radius: 50%;
             object-fit: cover;
         }
     </style>
-
 @endpush
 
 @section('content')
@@ -22,11 +20,13 @@
                     <p class="text-subtitle text-muted">Semua informasi mengenai Pengumuman</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first text-md-end text-start mb-2 mb-md-0">
-                    <button type="button" class="btn btn-primary rounded-pill d-inline-flex align-items-center"
-                        data-bs-toggle="modal" data-bs-target="#addAnnouncementModal">
-                        <i class="bi bi-plus-circle me-2"></i>
-                        <span>Tambah Pengumuman</span>
-                    </button>
+                    @if (auth()->user()->level == 1)
+                        <button type="button" class="btn btn-primary rounded-pill d-inline-flex align-items-center"
+                            data-bs-toggle="modal" data-bs-target="#addAnnouncementModal">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            <span>Tambah Pengumuman</span>
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($announcements as $item)
+                            @foreach ($announcements as $item)
                                 <tr>
                                     <td>{{ $item->title }}</td>
                                     <td>{{ Str::limit($item->content, 50) }}</td>
@@ -59,25 +59,30 @@
                                     </td>
                                     <td>{{ $item->created_at->format('d/m/Y') }}</td>
                                     <td>
-                                        <!-- Tombol Edit: kirim data ke modal -->
-                                        <button class="btn btn-sm btn-warning editBtn" data-id="{{ $item->id }}"
-                                            data-title="{{ $item->title }}" data-content="{{ $item->content }}"
-                                            data-active="{{ $item->is_active }}" data-bs-toggle="modal"
-                                            data-bs-target="#editAnnouncementModal">
-                                            Edit
-                                        </button>
+                                        @if (auth()->user()->level == 1)
+                                            <!-- Tombol Edit: kirim data ke modal -->
+                                            <button class="btn btn-sm btn-warning editBtn" data-id="{{ $item->id }}"
+                                                data-title="{{ $item->title }}" data-content="{{ $item->content }}"
+                                                data-active="{{ $item->is_active }}" data-bs-toggle="modal"
+                                                data-bs-target="#editAnnouncementModal">
+                                                Edit
+                                            </button>
 
-                                        <!-- Tombol Hapus -->
-                                        <button class="btn btn-sm btn-danger deleteBtn" data-id="{{ $item->id }}">
-                                            Hapus
-                                        </button>
+                                            <!-- Tombol Hapus -->
+                                            <button class="btn btn-sm btn-danger deleteBtn" data-id="{{ $item->id }}">
+                                                Hapus
+                                            </button>
 
-                                        <!-- Form tersembunyi -->
-                                        <form id="deleteForm-{{ $item->id }}"
-                                            action="{{ route('admin.announcement.destroy', $item->id) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                        </form>
+                                            <!-- Form tersembunyi -->
+                                            <form id="deleteForm-{{ $item->id }}"
+                                                action="{{ route('admin.announcement.destroy', $item->id) }}"
+                                                method="POST" style="display: none;">
+                                                @csrf
+                                            </form>
+                                        @else
+                                            {{-- Jika level != 1, bisa ditampilkan teks kosong atau “—” --}}
+                                            <span class="text-muted">—</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -186,10 +191,10 @@
     @endif
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // SweetAlert konfirmasi hapus
             document.querySelectorAll('.deleteBtn').forEach(button => {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function() {
                     const id = this.getAttribute('data-id');
 
                     Swal.fire({
@@ -228,10 +233,10 @@
                     editContent.value = content;
                     editIsActive.checked = isActive;
 
-                    editForm.action = "{{ route('admin.announcement.update', '__id__') }}".replace('__id__', id);
+                    editForm.action = "{{ route('admin.announcement.update', '__id__') }}".replace(
+                        '__id__', id);
                 });
             });
         });
-
     </script>
 @endpush

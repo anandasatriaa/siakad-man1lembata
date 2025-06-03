@@ -36,7 +36,8 @@
                                     srcset=""></a>
                         </div>
                         <div class="toggler">
-                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                            <a href="#" class="sidebar-hide d-xl-none d-block"><i
+                                    class="bi bi-x bi-middle"></i></a>
                         </div>
                     </div>
                 </div>
@@ -44,70 +45,153 @@
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
-                        <li class="sidebar-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                            <a href="{{ route('admin.dashboard') }}" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
+                        {{-- Dashboard --}}
+                        @if (auth()->user()->level == 1)
+                            <li class="sidebar-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                                <a href="{{ route('admin.dashboard') }}" class="sidebar-link">
+                                    <i class="bi bi-grid-fill"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="sidebar-item {{ request()->routeIs('kesiswaan.dashboard') ? 'active' : '' }}">
+                                <a href="{{ route('kesiswaan.dashboard') }}" class="sidebar-link">
+                                    <i class="bi bi-grid-fill"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="sidebar-item {{ request()->routeIs('admin.student.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.student.index') }}" class='sidebar-link'>
-                                <i class="bi bi-people-fill"></i>
-                                <span>Data Siswa</span>
-                            </a>
-                        </li>
+                        {{-- Data Siswa --}}
+                        @if (auth()->user()->level == 1)
+                            <li class="sidebar-item {{ request()->routeIs('admin.student.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.student.index') }}" class="sidebar-link">
+                                    <i class="bi bi-people-fill"></i>
+                                    <span>Data Siswa</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="sidebar-item {{ request()->routeIs('kesiswaan.student.*') ? 'active' : '' }}">
+                                <a href="{{ route('kesiswaan.student.index') }}" class="sidebar-link">
+                                    <i class="bi bi-people-fill"></i>
+                                    <span>Data Siswa</span>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="sidebar-item {{ request()->routeIs('admin.teacher.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.teacher.index') }}" class='sidebar-link'>
-                                <i class="bi bi-person-badge-fill"></i>
-                                <span>Data Guru</span>
-                            </a>
-                        </li>
+                        {{-- Data Guru --}}
+                        @if (auth()->user()->level == 1)
+                            <li class="sidebar-item {{ request()->routeIs('admin.teacher.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.teacher.index') }}" class="sidebar-link">
+                                    <i class="bi bi-person-badge-fill"></i>
+                                    <span>Data Guru</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="sidebar-item {{ request()->routeIs('kesiswaan.teacher.*') ? 'active' : '' }}">
+                                <a href="{{ route('kesiswaan.teacher.index') }}" class="sidebar-link">
+                                    <i class="bi bi-person-badge-fill"></i>
+                                    <span>Data Guru</span>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="sidebar-item {{ request()->routeIs('admin.class.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.class.index') }}" class='sidebar-link'>
-                                <i class="bi bi-door-open-fill"></i>
-                                <span>Kelas</span>
-                            </a>
-                        </li>
+                        {{-- Kelas --}}
+                        @if (auth()->user()->level == 1)
+                            <li class="sidebar-item {{ request()->routeIs('admin.class.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.class.index') }}" class="sidebar-link">
+                                    <i class="bi bi-door-open-fill"></i>
+                                    <span>Kelas</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="sidebar-item {{ request()->routeIs('kesiswaan.class.*') ? 'active' : '' }}">
+                                <a href="{{ route('kesiswaan.class.index') }}" class="sidebar-link">
+                                    <i class="bi bi-door-open-fill"></i>
+                                    <span>Kelas</span>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="sidebar-item {{ request()->routeIs('admin.course.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.course.index') }}" class='sidebar-link'>
-                                <i class="bi bi-book-half"></i>
-                                <span>Mata Pelajaran</span>
-                            </a>
-                        </li>
+                        {{-- Mata Pelajaran --}}
+                        @if (auth()->user()->level == 1)
+                            <li class="sidebar-item {{ request()->routeIs('admin.course.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.course.index') }}" class="sidebar-link">
+                                    <i class="bi bi-book-half"></i>
+                                    <span>Mata Pelajaran</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="sidebar-item {{ request()->routeIs('kesiswaan.course.*') ? 'active' : '' }}">
+                                <a href="{{ route('kesiswaan.course.index') }}" class="sidebar-link">
+                                    <i class="bi bi-book-half"></i>
+                                    <span>Mata Pelajaran</span>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="sidebar-item {{ request()->routeIs('admin.schedule.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.schedule.index') }}" class='sidebar-link'>
-                                <i class="bi bi-calendar-event-fill"></i>
-                                <span>Jadwal</span>
-                            </a>
-                        </li>
+                        {{-- Jadwal --}}
+                        @if (auth()->user()->level == 1)
+                            <li class="sidebar-item {{ request()->routeIs('admin.schedule.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.schedule.index') }}" class="sidebar-link">
+                                    <i class="bi bi-calendar-event-fill"></i>
+                                    <span>Jadwal</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="sidebar-item {{ request()->routeIs('kesiswaan.schedule.*') ? 'active' : '' }}">
+                                <a href="{{ route('kesiswaan.schedule.index') }}" class="sidebar-link">
+                                    <i class="bi bi-calendar-event-fill"></i>
+                                    <span>Jadwal</span>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="sidebar-item {{ request()->routeIs('admin.announcement.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.announcement.index') }}" class='sidebar-link'>
-                                <i class="bi bi-megaphone-fill"></i>
-                                <span>Pengumuman</span>
-                            </a>
-                        </li>
+                        {{-- Pengumuman --}}
+                        @if (auth()->user()->level == 1)
+                            <li class="sidebar-item {{ request()->routeIs('admin.announcement.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.announcement.index') }}" class="sidebar-link">
+                                    <i class="bi bi-megaphone-fill"></i>
+                                    <span>Pengumuman</span>
+                                </a>
+                            </li>
+                        @else
+                            <li
+                                class="sidebar-item {{ request()->routeIs('kesiswaan.announcement.*') ? 'active' : '' }}">
+                                <a href="{{ route('kesiswaan.announcement.index') }}" class="sidebar-link">
+                                    <i class="bi bi-megaphone-fill"></i>
+                                    <span>Pengumuman</span>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="sidebar-item {{ request()->routeIs('admin.grade.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.grade.index') }}" class='sidebar-link'>
-                                <i class="bi bi-award-fill"></i>
-                                <span>Nilai</span>
-                            </a>
-                        </li>
+                        {{-- Nilai --}}
+                        @if (auth()->user()->level == 1)
+                            <li class="sidebar-item {{ request()->routeIs('admin.grade.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.grade.index') }}" class="sidebar-link">
+                                    <i class="bi bi-award-fill"></i>
+                                    <span>Nilai</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="sidebar-item {{ request()->routeIs('kesiswaan.grade.*') ? 'active' : '' }}">
+                                <a href="{{ route('kesiswaan.grade.index') }}" class="sidebar-link">
+                                    <i class="bi bi-award-fill"></i>
+                                    <span>Nilai</span>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="sidebar-title">Setting</li>
-
-                        <li class="sidebar-item {{ request()->routeIs('admin.account.*') ? 'active' : '' }}">
-                            <a href="{{ route('admin.account.index') }}" class='sidebar-link'>
-                                <i class="bi bi-shield-lock-fill"></i>
-                                <span>Akun & Password</span>
-                            </a>
-                        </li>
+                        {{-- Hanya untuk admin: menu “Setting” dan “Akun & Password” --}}
+                        @if (auth()->user()->level == 1)
+                            <li class="sidebar-title">Setting</li>
+                            <li class="sidebar-item {{ request()->routeIs('admin.account.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.account.index') }}" class="sidebar-link">
+                                    <i class="bi bi-shield-lock-fill"></i>
+                                    <span>Akun & Password</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
@@ -150,23 +234,30 @@
                                         <h6 class="dropdown-header">Hello, John!</h6>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i> My
+                                        <a class="dropdown-item" href="#"><i
+                                                class="icon-mid bi bi-person me-2"></i> My
                                             Profile</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#"><i class="icon-mid bi bi-gear me-2"></i>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="icon-mid bi bi-gear me-2"></i>
                                             Settings</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#"><i class="icon-mid bi bi-wallet me-2"></i>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="icon-mid bi bi-wallet me-2"></i>
                                             Wallet</a>
                                     </li>
                                     <li>
                                         <hr class="dropdown-divider" />
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#"><i
-                                                class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</a>
+                                        <form action="{{ route('logout') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="icon-mid bi bi-box-arrow-left me-2"></i> Logout
+                                            </button>
+                                        </form>
                                     </li>
                                 </ul>
                             </div>
@@ -194,7 +285,7 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
     <script src="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/apexcharts/apexcharts.js') }}"></script>
