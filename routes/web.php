@@ -17,6 +17,13 @@ use App\Http\Controllers\Teacher\TeacherMaterialController;
 use App\Http\Controllers\Teacher\TeacherClassController;
 use App\Http\Controllers\Teacher\TeacherGradeController;
 
+use App\Http\Controllers\Student\StudentDashboardController;
+use App\Http\Controllers\Student\StudentScheduleController;
+use App\Http\Controllers\Student\StudentAnnouncementController;
+use App\Http\Controllers\Student\StudentMaterialController;
+use App\Http\Controllers\Student\StudentGradeController;
+use App\Http\Controllers\Student\StudentProfileController;
+
 // Login
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -81,44 +88,42 @@ Route::prefix('admin')->middleware(['auth', 'level:1'])->group(function () {
 });
 
 // Kesiswaan routes
-Route::prefix('kesiswaan')
-    ->middleware(['auth', 'level:2'])
-    ->group(function () {
-        Route::get('/dashboard', function () {
-            // Bisa ditampilkan view yang mirip dengan admin.dashboard,
-            // atau cukup menampilkan teks saja.
-            return view('admin.dashboard');
-        })->name('kesiswaan.dashboard');
+Route::prefix('kesiswaan')->middleware(['auth', 'level:2'])->group(function () {
+    Route::get('/dashboard', function () {
+        // Bisa ditampilkan view yang mirip dengan admin.dashboard,
+        // atau cukup menampilkan teks saja.
+        return view('admin.dashboard');
+    })->name('kesiswaan.dashboard');
 
-        // STUDENT (read‐only)
-        // Mapping ke method index di AdminStudentController (tampil list saja)
-        Route::get('/student', [AdminStudentController::class, 'index'])
-            ->name('kesiswaan.student.index');
+    // STUDENT (read‐only)
+    // Mapping ke method index di AdminStudentController (tampil list saja)
+    Route::get('/student', [AdminStudentController::class, 'index'])
+        ->name('kesiswaan.student.index');
 
-        // TEACHER (read‐only)
-        Route::get('/teacher', [AdminTeacherController::class, 'index'])
-            ->name('kesiswaan.teacher.index');
+    // TEACHER (read‐only)
+    Route::get('/teacher', [AdminTeacherController::class, 'index'])
+        ->name('kesiswaan.teacher.index');
 
-        // CLASS (read‐only)
-        Route::get('/class', [AdminClassController::class, 'index'])
-            ->name('kesiswaan.class.index');
+    // CLASS (read‐only)
+    Route::get('/class', [AdminClassController::class, 'index'])
+        ->name('kesiswaan.class.index');
 
-        // COURSE (read‐only)
-        Route::get('/course', [AdminCourseController::class, 'index'])
-            ->name('kesiswaan.course.index');
+    // COURSE (read‐only)
+    Route::get('/course', [AdminCourseController::class, 'index'])
+        ->name('kesiswaan.course.index');
 
-        // ANNOUNCEMENT (read‐only)
-        Route::get('/announcement', [AdminAnnouncementController::class, 'index'])
-            ->name('kesiswaan.announcement.index');
+    // ANNOUNCEMENT (read‐only)
+    Route::get('/announcement', [AdminAnnouncementController::class, 'index'])
+        ->name('kesiswaan.announcement.index');
 
-        // GRADE (read‐only)
-        Route::get('/grade', [AdminGradeController::class, 'index'])
-            ->name('kesiswaan.grade.index');
+    // GRADE (read‐only)
+    Route::get('/grade', [AdminGradeController::class, 'index'])
+        ->name('kesiswaan.grade.index');
 
-        // SCHEDULE (read‐only)
-        Route::get('/schedule', [AdminScheduleController::class, 'index'])
-            ->name('kesiswaan.schedule.index');
-    });
+    // SCHEDULE (read‐only)
+    Route::get('/schedule', [AdminScheduleController::class, 'index'])
+        ->name('kesiswaan.schedule.index');
+});
 
 // Guru routes
 Route::prefix('guru')->middleware(['auth', 'level:3'])->group(function () {
@@ -138,7 +143,17 @@ Route::prefix('guru')->middleware(['auth', 'level:3'])->group(function () {
 
 // Siswa routes
 Route::prefix('siswa')->middleware(['auth', 'level:4'])->group(function () {
-    Route::get('/dashboard', function () {
-        return 'Dashboard Siswa';
-    })->name('siswa.dashboard');
+    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
+
+    Route::get('/schedule', [StudentScheduleController::class, 'index'])->name('student.schedule.index');
+
+    Route::get('/announcement', [StudentAnnouncementController::class, 'index'])->name('student.announcement.index');
+
+    Route::get('/material', [StudentMaterialController::class, 'index'])->name('student.material.index');
+
+    Route::get('/grade', [StudentGradeController::class, 'index'])->name('student.grade.index');
+
+    Route::get('/profile', [StudentProfileController::class, 'index'])->name('student.profile.index');
+    Route::post('/profile/update', [StudentProfileController::class, 'updateProfile'])->name('student.profile.update');
+    Route::post('profile/password', [StudentProfileController::class, 'updatePassword'])->name('student.profile.password');
 });

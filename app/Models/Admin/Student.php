@@ -5,6 +5,7 @@ namespace App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Admin\SchoolClass;
 
 class Student extends Model
 {
@@ -26,6 +27,10 @@ class Student extends Model
         'photo',
         'status',
         'user_id',
+    ];
+
+    protected $casts = [
+        'birth_date' => 'date',  // atau 'datetime' jika di DB ada time‐stamp juga
     ];
 
     public function user()

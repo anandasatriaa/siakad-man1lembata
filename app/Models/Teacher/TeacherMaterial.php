@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
 use App\Models\Admin\Course;
+use App\Models\Admin\Teacher;
 
 class TeacherMaterial extends Model
 {
@@ -29,6 +30,11 @@ class TeacherMaterial extends Model
     public function teacher()
     {
         return $this->belongsTo(User::class, 'teacher_id');
+    }
+
+    public function teachers()
+    {
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 
     // Relasi ke Kelas
