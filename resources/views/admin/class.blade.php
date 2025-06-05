@@ -164,10 +164,10 @@
                                                                         <div class="col-md-6">
                                                                             <div class="form-check">
                                                                                 <input class="form-check-input"
-                                                                                    type="checkbox" name="students[]"
+                                                                                    type="checkbox" name="students[]" id="student-{{ $student->id }}"
                                                                                     value="{{ $student->id }}"
                                                                                     {{ in_array($student->id, $class->students->pluck('id')->toArray()) ? 'checked' : '' }}>
-                                                                                <label class="form-check-label">
+                                                                                <label class="form-check-label" for="student-{{ $student->id }}">
                                                                                     {{ $student->full_name }}
                                                                                 </label>
                                                                             </div>

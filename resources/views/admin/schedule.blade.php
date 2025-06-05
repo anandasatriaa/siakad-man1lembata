@@ -3,6 +3,12 @@
 @section('title', 'Jadwal Pelajaran')
 
 @push('css')
+    <style>
+        .toggle-icon {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -29,24 +35,18 @@
                 <div class="card-header">Jadwal Pelajaran</div>
                 <div class="card-body">
                     <!-- Nav Tabs untuk X, XI, XII -->
-                    <ul class="nav nav-tabs nav-justified" id="gradeTabs" role="tablist">
+                    <ul class="nav nav-tabs nav-justified" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="tab-x" data-bs-toggle="tab" data-bs-target="#content-x"
-                                type="button" role="tab" aria-controls="content-x" aria-selected="true">
-                                Kelas X
-                            </button>
+                            <a class="nav-link active" id="tab-x" data-bs-toggle="tab" href="#content-x"
+                                role="tab">Kelas X</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="tab-xi" data-bs-toggle="tab" data-bs-target="#content-xi"
-                                type="button" role="tab" aria-controls="content-xi" aria-selected="false">
-                                Kelas XI
-                            </button>
+                            <a class="nav-link" id="tab-xi" data-bs-toggle="tab" href="#content-xi" role="tab">Kelas
+                                XI</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="tab-xii" data-bs-toggle="tab" data-bs-target="#content-xii"
-                                type="button" role="tab" aria-controls="content-xii" aria-selected="false">
-                                Kelas XII
-                            </button>
+                            <a class="nav-link" id="tab-xii" data-bs-toggle="tab" href="#content-xii" role="tab">Kelas
+                                XII</a>
                         </li>
                     </ul>
 
@@ -59,11 +59,11 @@
                                 @foreach ($classes->where('category', 'X') as $class)
                                     {{-- Tombol Collapse untuk tiap kelas X --}}
                                     <button
-                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center collapsed"
                                         data-bs-toggle="collapse" data-bs-target="#jadwal-{{ $class->id }}"
                                         aria-expanded="false" aria-controls="jadwal-{{ $class->id }}">
                                         {{ $class->name }}
-                                        <span class="badge bg-secondary">▼</span>
+                                        <span class="toggle-icon">+</span>
                                     </button>
 
                                     {{-- Konten Collapse --}}
@@ -326,8 +326,7 @@
     </div>
 
     <!-- Modal Tambah Jadwal -->
-    <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <form method="POST" action="{{ route('admin.schedule.store') }}">
@@ -522,6 +521,24 @@
 
             // Inisialisasi pertama kali
             updateRemoveButtons();
+        });
+    </script>
+
+    {{-- COLLAPSE --}}
+    <script>
+        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(button => {
+            const targetId = button.getAttribute('data-bs-target');
+            const target = document.querySelector(targetId);
+            const icon = button.querySelector('.toggle-icon');
+
+            // Toggle icon saat collapse dibuka/tutup
+            target.addEventListener('show.bs.collapse', () => {
+                icon.textContent = '−';
+            });
+
+            target.addEventListener('hide.bs.collapse', () => {
+                icon.textContent = '+';
+            });
         });
     </script>
 

@@ -49,20 +49,22 @@
                                             @endif
                                         </div>
                                         @if (auth()->user()->level == 1)
-                                            <button class="btn btn-sm btn-warning btn-edit" data-id="{{ $course->id }}"
-                                                data-name="{{ $course->name }}" data-code="{{ $course->code }}"
-                                                data-grade="{{ $course->grade }}"
-                                                data-route="{{ route('admin.course.update', $course->id) }}"
-                                                data-bs-toggle="modal" data-bs-target="#modalEdit">
-                                                Edit
-                                            </button>
-                                            <button class="btn btn-sm btn-danger btn-delete"
-                                                data-id="{{ $course->id }}">Hapus</button>
-                                            <form id="delete-form-{{ $course->id }}"
-                                                action="{{ route('admin.course.destroy', $course->id) }}" method="POST"
-                                                style="display: none;">
-                                                @csrf
-                                            </form>
+                                            <div>
+                                                <button class="btn btn-sm btn-warning btn-edit"
+                                                    data-id="{{ $course->id }}" data-name="{{ $course->name }}"
+                                                    data-code="{{ $course->code }}" data-grade="{{ $course->grade }}"
+                                                    data-route="{{ route('admin.course.update', $course->id) }}"
+                                                    data-bs-toggle="modal" data-bs-target="#modalEdit">
+                                                    Edit
+                                                </button>
+                                                <button class="btn btn-sm btn-danger btn-delete"
+                                                    data-id="{{ $course->id }}">Hapus</button>
+                                                <form id="delete-form-{{ $course->id }}"
+                                                    action="{{ route('admin.course.destroy', $course->id) }}"
+                                                    method="POST" style="display: none;">
+                                                    @csrf
+                                                </form>
+                                            </div>
                                         @endif
                                     </li>
                                 @endforeach

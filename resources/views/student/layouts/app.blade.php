@@ -22,6 +22,18 @@
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+    <style>
+        .sidebar-wrapper .sidebar-header img {
+            height: 3rem !important;
+        }
+
+        .sidebar-wrapper .sidebar-header .logo {
+            font-size: 1.25rem !important;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+    
     @stack('css')
 </head>
 
@@ -31,9 +43,13 @@
             <div class="sidebar-wrapper active">
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
-                        <div class="logo">
-                            <a href="index.html"><img src="{{ asset('assets/images/logo/logo.png') }}" alt="Logo"
-                                    srcset=""></a>
+                        <div class="logo d-flex align-items-center">
+                            <a href="{{ route('student.dashboard') }}">
+                                <img src="{{ asset('assets/images/logo/logo-lembata.png') }}" alt="Logo">
+                            </a>
+                            <div class="ms-2 lh-sm">
+                                <strong>MAN 1</strong><br>LEMBATA
+                            </div>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i
@@ -115,12 +131,22 @@
                             <ul class="navbar-nav ms-auto mb-lg-0">
 
                             </ul>
+                            @php
+                                $user = Auth::user();
+                                $levels = [
+                                    1 => 'Admin',
+                                    2 => 'Kesiswaan',
+                                    3 => 'Guru',
+                                    4 => 'Siswa/Siswi',
+                                ];
+                            @endphp
                             <div class="dropdown">
                                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="user-menu d-flex">
                                         <div class="user-name text-end me-3">
-                                            <h6 class="mb-0 text-gray-600">John Ducky</h6>
-                                            <p class="mb-0 text-sm text-gray-600">Siswa</p>
+                                            <h6 class="mb-0 text-gray-600">{{ $user->name }}</h6>
+                                            <p class="mb-0 text-sm text-gray-600">
+                                                {{ $levels[$user->level] ?? 'Tidak Diketahui' }}</p>
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">
@@ -132,22 +158,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"
                                     style="min-width: 11rem">
                                     <li>
-                                        <h6 class="dropdown-header">Hello, John!</h6>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#"><i
-                                                class="icon-mid bi bi-person me-2"></i> My
-                                            Profile</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#"><i
-                                                class="icon-mid bi bi-gear me-2"></i>
-                                            Settings</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#"><i
-                                                class="icon-mid bi bi-wallet me-2"></i>
-                                            Wallet</a>
+                                        <h6 class="dropdown-header">Hello, {{ $user->name }}!</h6>
                                     </li>
                                     <li>
                                         <hr class="dropdown-divider" />
