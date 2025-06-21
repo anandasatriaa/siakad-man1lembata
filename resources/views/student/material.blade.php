@@ -51,45 +51,61 @@
 @endpush
 
 @section('content')
-    <div class="container mx-auto px-4 py-6">
-        <h2 class="text-2xl font-semibold mb-6">Daftar Materi Pembelajaran</h2>
-
-        @if ($materials->isEmpty())
-            <div class="no-material">
-                Belum ada materi pembelajaran untuk kelas Anda.
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Daftar Materi Pembelajaran</h3>
+                    <p class="text-subtitle text-muted">Semua materi pembelajaran kelas berada di sini</p>
+                </div>
             </div>
-        @else
-            @foreach ($materials as $material)
-                <div class="material-card">
-                    <div class="material-title">
-                        {{ $material->title }}
-                    </div>
-                    <div class="material-meta">
-                        @if ($material->course)
-                            Mata Pelajaran: <strong>{{ $material->course->name }}</strong> ({{ $material->course->code }})
-                            &nbsp;|&nbsp;
-                        @endif
-                        Pengajar: <strong>{{ $material->teacher ? $material->teacher->full_name : '-' }}</strong>
-                        &nbsp;|&nbsp;
-                        Dipublikasikan: <strong>
-                            {{ $material->published_at
+        </div>
+        <section class="section">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        @if ($materials->isEmpty())
+                            <div class="no-material">
+                                Belum ada materi pembelajaran untuk kelas Anda.
+                            </div>
+                        @else
+                            @foreach ($materials as $material)
+                                        <div class="material-card">
+                                            <div class="material-title">
+                                                {{ $material->title }}
+                                            </div>
+                                            <div class="material-meta">
+                                                @if ($material->course)
+                                                    Mata Pelajaran: <strong>{{ $material->course->name }}</strong>
+                                                    ({{ $material->course->code }})
+                                                    &nbsp;|&nbsp;
+                                                @endif
+                                                Pengajar: <strong>{{ $material->teacher ? $material->teacher->full_name : '-' }}</strong>
+                                                &nbsp;|&nbsp;
+                                                Dipublikasikan: <strong>
+                                                    {{ $material->published_at
                                 ? \Carbon\Carbon::parse($material->published_at)->timezone('Asia/Jakarta')->format('d F Y H:i')
                                 : '-' }}
-                        </strong>
-                    </div>
-                    @if ($material->description)
-                        <div class="material-description">
-                            {!! nl2br(e($material->description)) !!}
-                        </div>
-                    @endif
-                    <div>
-                        <a href="{{ asset('storage/' . $material->file_path) }}" target="_blank" class="material-link">
-                            Unduh / Lihat File Materi &rarr;
-                        </a>
+                                                </strong>
+                                            </div>
+                                            @if ($material->description)
+                                                <div class="material-description">
+                                                    {!! nl2br(e($material->description)) !!}
+                                                </div>
+                                            @endif
+                                            <div>
+                                                <a href="{{ asset('storage/' . $material->file_path) }}" target="_blank"
+                                                    class="material-link">
+                                                    Unduh / Lihat File Materi &rarr;
+                                                </a>
+                                            </div>
+                                        </div>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
-            @endforeach
-        @endif
+            </div>
+        </section>
     </div>
 @endsection
 

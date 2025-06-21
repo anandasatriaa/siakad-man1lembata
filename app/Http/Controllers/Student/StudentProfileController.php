@@ -39,7 +39,7 @@ class StudentProfileController extends Controller
         $student    = Student::where('user_id', $user->id)->first();
 
         if (! $student) {
-            return redirect()->route('student.profile')
+            return redirect()->route('student.profile.index')
                 ->with('error', 'Data siswa tidak ditemukan.');
         }
 
@@ -100,7 +100,7 @@ class StudentProfileController extends Controller
         $student->guardian_phone  = $validated['guardian_phone'] ?? null;
         $student->save();
 
-        return redirect()->route('student.profile')
+        return redirect()->route('student.profile.index')
             ->with('success', 'Profil berhasil diperbarui.');
     }
 
@@ -127,7 +127,7 @@ class StudentProfileController extends Controller
         $user->password = Hash::make($validated['new_password']);
         $user->save();
 
-        return redirect()->route('student.profile')
+        return redirect()->route('student.profile.index')
             ->with('success_password', 'Kata sandi berhasil diubah.');
     }
 }

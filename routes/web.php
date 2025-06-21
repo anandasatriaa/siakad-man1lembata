@@ -92,32 +92,25 @@ Route::prefix('kesiswaan')->middleware(['auth', 'level:2'])->group(function () {
 
     // STUDENT (read‐only)
     // Mapping ke method index di AdminStudentController (tampil list saja)
-    Route::get('/student', [AdminStudentController::class, 'index'])
-        ->name('kesiswaan.student.index');
+    Route::get('/student', [AdminStudentController::class, 'index'])->name('kesiswaan.student.index');
 
     // TEACHER (read‐only)
-    Route::get('/teacher', [AdminTeacherController::class, 'index'])
-        ->name('kesiswaan.teacher.index');
+    Route::get('/teacher', [AdminTeacherController::class, 'index'])->name('kesiswaan.teacher.index');
 
     // CLASS (read‐only)
-    Route::get('/class', [AdminClassController::class, 'index'])
-        ->name('kesiswaan.class.index');
+    Route::get('/class', [AdminClassController::class, 'index'])->name('kesiswaan.class.index');
 
     // COURSE (read‐only)
-    Route::get('/course', [AdminCourseController::class, 'index'])
-        ->name('kesiswaan.course.index');
+    Route::get('/course', [AdminCourseController::class, 'index'])->name('kesiswaan.course.index');
 
     // ANNOUNCEMENT (read‐only)
-    Route::get('/announcement', [AdminAnnouncementController::class, 'index'])
-        ->name('kesiswaan.announcement.index');
+    Route::get('/announcement', [AdminAnnouncementController::class, 'index'])->name('kesiswaan.announcement.index');
 
     // GRADE (read‐only)
-    Route::get('/grade', [AdminGradeController::class, 'index'])
-        ->name('kesiswaan.grade.index');
+    Route::get('/grade', [AdminGradeController::class, 'index'])->name('kesiswaan.grade.index');
 
     // SCHEDULE (read‐only)
-    Route::get('/schedule', [AdminScheduleController::class, 'index'])
-        ->name('kesiswaan.schedule.index');
+    Route::get('/schedule', [AdminScheduleController::class, 'index'])->name('kesiswaan.schedule.index');
 });
 
 // Guru routes
@@ -138,7 +131,7 @@ Route::prefix('guru')->middleware(['auth', 'level:3'])->group(function () {
 
 // Siswa routes
 Route::prefix('siswa')->middleware(['auth', 'level:4'])->group(function () {
-    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
+    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard.index');
 
     Route::get('/schedule', [StudentScheduleController::class, 'index'])->name('student.schedule.index');
 

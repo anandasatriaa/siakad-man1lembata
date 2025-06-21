@@ -42,28 +42,43 @@
 @endpush
 
 @section('content')
-    <div class="container mx-auto px-4 py-6">
-        <h2 class="text-2xl font-semibold mb-6">Daftar Pengumuman</h2>
 
-        @if ($announcements->isEmpty())
-            <div class="no-announcement">
-                Saat ini belum ada pengumuman.
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Daftar Pengumuman</h3>
+                    <p class="text-subtitle text-muted">Semua informasi pengumuman berada di sini</p>
+                </div>
             </div>
-        @else
-            @foreach ($announcements as $announcement)
-                <div class="announcement-card">
-                    <div class="announcement-title">
-                        {{ $announcement->title }}
-                    </div>
-                    <div class="announcement-date">
-                        {{ \Carbon\Carbon::parse($announcement->created_at)->format('d F Y H:i') }}
-                    </div>
-                    <div class="announcement-content">
-                        {!! nl2br(e($announcement->content)) !!}
+        </div>
+        <section class="section">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        @if ($announcements->isEmpty())
+                            <div class="no-announcement">
+                                Saat ini belum ada pengumuman.
+                            </div>
+                        @else
+                            @foreach ($announcements as $announcement)
+                                <div class="announcement-card">
+                                    <div class="announcement-title">
+                                        {{ $announcement->title }}
+                                    </div>
+                                    <div class="announcement-date">
+                                        {{ \Carbon\Carbon::parse($announcement->created_at)->format('d F Y H:i') }}
+                                    </div>
+                                    <div class="announcement-content">
+                                        {!! nl2br(e($announcement->content)) !!}
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
-            @endforeach
-        @endif
+            </div>
+        </section>
     </div>
 @endsection
 

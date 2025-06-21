@@ -44,7 +44,7 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo d-flex align-items-center">
-                            <a href="{{ route('student.dashboard') }}">
+                            <a href="{{ route('student.dashboard.index') }}">
                                 <img src="{{ asset('assets/images/logo/logo-lembata.png') }}" alt="Logo">
                             </a>
                             <div class="ms-2 lh-sm">
@@ -62,8 +62,8 @@
                         <li class="sidebar-title">Menu</li>
 
                         {{-- Dashboard --}}
-                        <li class="sidebar-item {{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
-                            <a href="{{ route('student.dashboard') }}" class="sidebar-link">
+                        <li class="sidebar-item {{ request()->routeIs('student.dashboard.*') ? 'active' : '' }}">
+                            <a href="{{ route('student.dashboard.index') }}" class="sidebar-link">
                                 <i class="bi bi-grid-fill"></i>
                                 <span>Dashboard</span>
                             </a>
