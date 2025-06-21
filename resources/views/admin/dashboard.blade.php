@@ -7,9 +7,30 @@
 
 @section('content')
     <div class="page-heading">
-        <h3>Profile Statistics</h3>
+        <h3>Dashboard</h3>
     </div>
+    
     <div class="page-content">
+        @if($announcements->isNotEmpty())
+        <div class="card mb-4" style="border-bottom: 5px solid #435ebe">
+            <div class="card-header">
+                <h2>Pengumuman Terbaru</h2>
+            </div>
+            <div class="card-body">
+                @foreach($announcements as $ann)
+                    <div class="mb-3">
+                        <h5>{{ $ann->title }}</h5>
+                        <p class="text-muted"><small>Diposting pada {{ $ann->created_at->format('d M Y H:i') }}</small></p>
+                        <p>{!! nl2br(e($ann->content)) !!}</p>
+                        <hr>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        @else
+            <p>Tidak ada pengumuman aktif saat ini.</p>
+        @endif
+
         <section class="row">
             <div class="col-12 col-lg-9">
                 <div class="row">
@@ -19,12 +40,12 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon purple">
-                                            <i class="iconly-boldShow"></i>
+                                            <i class="iconly-boldUser"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Profile Views</h6>
-                                        <h6 class="font-extrabold mb-0">112.000</h6>
+                                        <h6 class="text-muted font-semibold">Siswa Aktif</h6>
+                                        <h6 class="font-extrabold mb-0">{{ number_format($totalStudents) }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -36,12 +57,12 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon blue">
-                                            <i class="iconly-boldProfile"></i>
+                                            <i class="iconly-boldAdd-User"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Followers</h6>
-                                        <h6 class="font-extrabold mb-0">183.000</h6>
+                                        <h6 class="text-muted font-semibold">Guru Aktif</h6>
+                                        <h6 class="font-extrabold mb-0">{{ number_format($totalTeachers) }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -53,12 +74,12 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon green">
-                                            <i class="iconly-boldAdd-User"></i>
+                                            <i class="iconly-boldCategory"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Following</h6>
-                                        <h6 class="font-extrabold mb-0">80.000</h6>
+                                        <h6 class="text-muted font-semibold">Kelas</h6>
+                                        <h6 class="font-extrabold mb-0">{{ number_format($totalClasses) }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -74,205 +95,80 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Saved Post</h6>
-                                        <h6 class="font-extrabold mb-0">112</h6>
+                                        <h6 class="text-muted font-semibold">Mata Pelajaran</h6>
+                                        <h6 class="font-extrabold mb-0">{{ number_format($totalCourses) }}</h6>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mt-4">
+                    {{-- Jadwal Hari Ini --}}
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Profile Visit</h4>
+                                <h4>Jadwal Hari Ini ({{ \Carbon\Carbon::now()->translatedFormat('l, d M Y') }})</h4>
                             </div>
-                            <div class="card-body">
-                                <div id="chart-profile-visit"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-xl-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Profile Visit</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="d-flex align-items-center">
-                                            <svg class="bi text-primary" width="32" height="32" fill="blue"
-                                                style="width:10px">
-                                                <use
-                                                    xlink:href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
-                                            </svg>
-                                            <h5 class="mb-0 ms-3">Europe</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <h5 class="mb-0">862</h5>
-                                    </div>
-                                    <div class="col-12">
-                                        <div id="chart-europe"></div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="d-flex align-items-center">
-                                            <svg class="bi text-success" width="32" height="32" fill="blue"
-                                                style="width:10px">
-                                                <use
-                                                    xlink:href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
-                                            </svg>
-                                            <h5 class="mb-0 ms-3">America</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <h5 class="mb-0">375</h5>
-                                    </div>
-                                    <div class="col-12">
-                                        <div id="chart-america"></div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="d-flex align-items-center">
-                                            <svg class="bi text-danger" width="32" height="32" fill="blue"
-                                                style="width:10px">
-                                                <use
-                                                    xlink:href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
-                                            </svg>
-                                            <h5 class="mb-0 ms-3">Indonesia</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <h5 class="mb-0">1025</h5>
-                                    </div>
-                                    <div class="col-12">
-                                        <div id="chart-indonesia"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xl-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Latest Comments</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-lg">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Comment</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="col-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="avatar avatar-md">
-                                                            <img src="{{ asset('assets/images/faces/5.jpg') }}">
-                                                        </div>
-                                                        <p class="font-bold ms-3 mb-0">Si Cantik</p>
-                                                    </div>
-                                                </td>
-                                                <td class="col-auto">
-                                                    <p class=" mb-0">Congratulations on your graduation!</p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="col-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="avatar avatar-md">
-                                                            <img src="{{ asset('assets/images/faces/5.jpg') }}">
-                                                        </div>
-                                                        <p class="font-bold ms-3 mb-0">Si Ganteng</p>
-                                                    </div>
-                                                </td>
-                                                <td class="col-auto">
-                                                    <p class=" mb-0">Wow amazing design! Can you make another
-                                                        tutorial for
-                                                        this design?</p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="card-body p-3">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Kelas</th>
+                                            <th>Mapel</th>
+                                            <th>Guru</th>
+                                            <th>Waktu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($todaySchedules as $s)
+                                        <tr>
+                                            <td>{{ $s->schoolClass->name }}</td>
+                                            <td>{{ $s->course->name ?? '-' }}</td>
+                                            <td>{{ $s->teacher->full_name ?? '-' }}</td>
+                                            <td>{{ $s->start_time }} - {{ $s->end_time }}</td>
+                                        </tr>
+                                        @empty
+                                        <tr><td colspan="4" class="text-center">Tidak ada jadwal hari ini</td></tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-lg-3">
-                <div class="card">
-                    <div class="card-body py-4 px-5">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar avatar-xl">
-                                <img src="{{ asset('assets/images/faces/5.jpg') }}" alt="Face 1">
-                            </div>
-                            <div class="ms-3 name">
-                                <h5 class="font-bold">John Duck</h5>
-                                <h6 class="text-muted mb-0">@johnducky</h6>
-                            </div>
-                        </div>
-                    </div>
+                {{-- Alerts --}}
+                @foreach($alerts as $key => $count)
+                <div class="alert alert-{{ $count ? 'danger' : 'success' }}">
+                    {{ ucwords(str_replace('_',' ', $key)) }}: <strong>{{ $count }}</strong>
                 </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Recent Messages</h4>
-                    </div>
-                    <div class="card-content pb-4">
-                        <div class="recent-message d-flex px-4 py-3">
-                            <div class="avatar avatar-lg">
-                                <img src="{{ asset('assets/images/faces/4.jpg') }}">
-                            </div>
-                            <div class="name ms-4">
-                                <h5 class="mb-1">Hank Schrader</h5>
-                                <h6 class="text-muted mb-0">@johnducky</h6>
-                            </div>
-                        </div>
-                        <div class="recent-message d-flex px-4 py-3">
-                            <div class="avatar avatar-lg">
-                                <img src="{{ asset('assets/images/faces/4.jpg') }}">
-                            </div>
-                            <div class="name ms-4">
-                                <h5 class="mb-1">Dean Winchester</h5>
-                                <h6 class="text-muted mb-0">@imdean</h6>
-                            </div>
-                        </div>
-                        <div class="recent-message d-flex px-4 py-3">
-                            <div class="avatar avatar-lg">
-                                <img src="{{ asset('assets/images/faces/4.jpg') }}">
-                            </div>
-                            <div class="name ms-4">
-                                <h5 class="mb-1">John Dodol</h5>
-                                <h6 class="text-muted mb-0">@dodoljohn</h6>
-                            </div>
-                        </div>
-                        <div class="px-4">
-                            <button class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>Start
-                                Conversation</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Visitors Profile</h4>
-                    </div>
-                    <div class="card-body">
-                        <div id="chart-visitors-profile"></div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </section>
     </div>
 @endsection
 
 @push('js')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Distribusi Gender
+        new Chart(document.getElementById('chartGender'), {
+            type: 'pie',
+            data: {
+                labels: ['Laki-laki','Perempuan'],
+                datasets: [{ data: [{{ $genderDistribution['M'] }}, {{ $genderDistribution['F'] }}] }]
+            }
+        });
+        // Siswa per Kelas
+        new Chart(document.getElementById('chartPerClass'), {
+            type: 'bar',
+            data: {
+                labels: [{!! $classesWithCount->pluck('name')->map(fn($n) => "'{$n}'")->join(',') !!}],
+                datasets: [{ label: 'Jumlah Siswa', data: [{!! $classesWithCount->pluck('students_count')->join(',') !!}] }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+    </script>
 @endpush

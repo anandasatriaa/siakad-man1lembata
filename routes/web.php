@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminStudentController;
 use App\Http\Controllers\Admin\AdminTeacherController;
 use App\Http\Controllers\Admin\AdminClassController;
@@ -38,9 +39,7 @@ Route::post('/logout', function () {
 
 // Admin routes
 Route::prefix('admin')->middleware(['auth', 'level:1'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard.index');
 
     Route::get('/student', [AdminStudentController::class, 'index'])->name('admin.student.index');
     Route::post('/student/store', [AdminStudentController::class, 'store'])->name('admin.student.store');
@@ -89,11 +88,7 @@ Route::prefix('admin')->middleware(['auth', 'level:1'])->group(function () {
 
 // Kesiswaan routes
 Route::prefix('kesiswaan')->middleware(['auth', 'level:2'])->group(function () {
-    Route::get('/dashboard', function () {
-        // Bisa ditampilkan view yang mirip dengan admin.dashboard,
-        // atau cukup menampilkan teks saja.
-        return view('admin.dashboard');
-    })->name('kesiswaan.dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('kesiswaan.dashboard.index');
 
     // STUDENT (read‐only)
     // Mapping ke method index di AdminStudentController (tampil list saja)

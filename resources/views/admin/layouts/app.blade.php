@@ -44,7 +44,7 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo d-flex align-items-center">
-                            <a href="{{ route('admin.dashboard') }}">
+                            <a href="{{ route('admin.dashboard.index') }}">
                                 <img src="{{ asset('assets/images/logo/logo-lembata.png') }}" alt="Logo">
                             </a>
                             <div class="ms-2 lh-sm">
@@ -63,15 +63,15 @@
 
                         {{-- Dashboard --}}
                         @if (auth()->user()->level == 1)
-                            <li class="sidebar-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                                <a href="{{ route('admin.dashboard') }}" class="sidebar-link">
+                            <li class="sidebar-item {{ request()->routeIs('admin.dashboard.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.dashboard.index') }}" class="sidebar-link">
                                     <i class="bi bi-grid-fill"></i>
                                     <span>Dashboard</span>
                                 </a>
                             </li>
                         @else
-                            <li class="sidebar-item {{ request()->routeIs('kesiswaan.dashboard') ? 'active' : '' }}">
-                                <a href="{{ route('kesiswaan.dashboard') }}" class="sidebar-link">
+                            <li class="sidebar-item {{ request()->routeIs('kesiswaan.dashboard.*') ? 'active' : '' }}">
+                                <a href="{{ route('kesiswaan.dashboard.index') }}" class="sidebar-link">
                                     <i class="bi bi-grid-fill"></i>
                                     <span>Dashboard</span>
                                 </a>
