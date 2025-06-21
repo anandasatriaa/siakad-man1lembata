@@ -34,6 +34,8 @@ class AuthController extends Controller
                     return redirect()->intended('/guru/dashboard');
                 case '4':
                     return redirect()->intended('/siswa/dashboard');
+                case '5':
+                    return redirect()->intended('/parent/dashboard');
                 default:
                     Auth::logout();
                     abort(403, 'Akses tidak dikenali.');

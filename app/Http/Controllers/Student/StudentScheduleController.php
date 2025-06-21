@@ -15,12 +15,17 @@ class StudentScheduleController extends Controller
         // 1. Ambil user yang sedang login
         $user = Auth::user();
 
-        // 2. Cari data student berdasarkan user_id
-        $student = Student::with('class')->where('user_id', $user->id)->first();
+        // Cek apakah level 4 (siswa) atau level 5 (orang tua)
+        if ($user->level == 4) {
+            $student = $user->student;
+        } elseif ($user->level == 5) {
+            $student = Student::find($user->guardian_of_student_id);
+        } else {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
 
-        if (! $student) {
-            // Jika student tidak ditemukan (misal akun ini bukan siswa)
-            return redirect()->route('home')->with('error', 'Anda bukan siswa atau data siswa tidak ditemukan.');
+        if (!$student) {
+            abort(404, 'Data siswa tidak ditemukan.');
         }
 
         // 3. Ambil class_id milik siswa

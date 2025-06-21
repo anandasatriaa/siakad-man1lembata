@@ -145,3 +145,20 @@ Route::prefix('siswa')->middleware(['auth', 'level:4'])->group(function () {
     Route::post('/profile/update', [StudentProfileController::class, 'updateProfile'])->name('student.profile.update');
     Route::post('profile/password', [StudentProfileController::class, 'updatePassword'])->name('student.profile.password');
 });
+
+
+Route::prefix('parent')->middleware(['auth', 'level:5'])->group(function () {
+    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('parent.dashboard.index');
+
+    Route::get('/schedule', [StudentScheduleController::class, 'index'])->name('parent.schedule.index');
+
+    Route::get('/announcement', [StudentAnnouncementController::class, 'index'])->name('parent.announcement.index');
+
+    Route::get('/material', [StudentMaterialController::class, 'index'])->name('parent.material.index');
+
+    Route::get('/grade', [StudentGradeController::class, 'index'])->name('parent.grade.index');
+
+    Route::get('/profile', [StudentProfileController::class, 'index'])->name('parent.profile.index');
+    Route::post('/profile/update', [StudentProfileController::class, 'updateProfile'])->name('parent.profile.update');
+    Route::post('profile/password', [StudentProfileController::class, 'updatePassword'])->name('parent.profile.password');
+});

@@ -33,7 +33,7 @@
             align-items: center;
         }
     </style>
-    
+
     @stack('css')
 </head>
 
@@ -52,8 +52,7 @@
                             </div>
                         </div>
                         <div class="toggler">
-                            <a href="#" class="sidebar-hide d-xl-none d-block"><i
-                                    class="bi bi-x bi-middle"></i></a>
+                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
                         </div>
                     </div>
                 </div>
@@ -61,54 +60,64 @@
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
+                        {{-- Ambil level user --}}
+                        @php
+                            $level = Auth::user()->level;
+                            $prefix = $level == 5 ? 'parent' : 'student';
+                        @endphp
+
                         {{-- Dashboard --}}
-                        <li class="sidebar-item {{ request()->routeIs('student.dashboard.*') ? 'active' : '' }}">
-                            <a href="{{ route('student.dashboard.index') }}" class="sidebar-link">
+                        <li class="sidebar-item {{ request()->routeIs($prefix . '.dashboard.*') ? 'active' : '' }}">
+                            <a href="{{ route($prefix . '.dashboard.index') }}" class="sidebar-link">
                                 <i class="bi bi-grid-fill"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
 
                         {{-- Schedule --}}
-                        <li class="sidebar-item {{ request()->routeIs('student.schedule.index') ? 'active' : '' }}">
-                            <a href="{{ route('student.schedule.index') }}" class="sidebar-link">
+                        <li class="sidebar-item {{ request()->routeIs($prefix . '.schedule.index') ? 'active' : '' }}">
+                            <a href="{{ route($prefix . '.schedule.index') }}" class="sidebar-link">
                                 <i class="bi bi-calendar-fill"></i>
                                 <span>Jadwal</span>
                             </a>
                         </li>
 
                         {{-- Announcement --}}
-                        <li class="sidebar-item {{ request()->routeIs('student.announcement.index') ? 'active' : '' }}">
-                            <a href="{{ route('student.announcement.index') }}" class="sidebar-link">
+                        <li
+                            class="sidebar-item {{ request()->routeIs($prefix . '.announcement.index') ? 'active' : '' }}">
+                            <a href="{{ route($prefix . '.announcement.index') }}" class="sidebar-link">
                                 <i class="bi bi-megaphone-fill"></i>
                                 <span>Pengumuman</span>
                             </a>
                         </li>
 
                         {{-- Material --}}
-                        <li class="sidebar-item {{ request()->routeIs('student.material.index') ? 'active' : '' }}">
-                            <a href="{{ route('student.material.index') }}" class="sidebar-link">
+                        <li class="sidebar-item {{ request()->routeIs($prefix . '.material.index') ? 'active' : '' }}">
+                            <a href="{{ route($prefix . '.material.index') }}" class="sidebar-link">
                                 <i class="bi bi-book-fill"></i>
                                 <span>Materi</span>
                             </a>
                         </li>
 
                         {{-- Grade --}}
-                        <li class="sidebar-item {{ request()->routeIs('student.grade.index') ? 'active' : '' }}">
-                            <a href="{{ route('student.grade.index') }}" class="sidebar-link">
+                        <li class="sidebar-item {{ request()->routeIs($prefix . '.grade.index') ? 'active' : '' }}">
+                            <a href="{{ route($prefix . '.grade.index') }}" class="sidebar-link">
                                 <i class="bi bi-award-fill"></i>
                                 <span>Nilai</span>
                             </a>
                         </li>
 
-                        {{-- Profile --}}
-                        <li class="sidebar-title">Setting</li>
-                        <li class="sidebar-item {{ request()->routeIs('student.profile.index') ? 'active' : '' }}">
-                            <a href="{{ route('student.profile.index') }}" class="sidebar-link">
-                                <i class="bi bi-person-fill"></i>
-                                <span>Profil</span>
-                            </a>
-                        </li>
+                        {{-- Setting & Profile hanya untuk siswa --}}
+                        @if ($level == 4)
+                            <li class="sidebar-title">Setting</li>
+
+                            <li class="sidebar-item {{ request()->routeIs('student.profile.index') ? 'active' : '' }}">
+                                <a href="{{ route('student.profile.index') }}" class="sidebar-link">
+                                    <i class="bi bi-person-fill"></i>
+                                    <span>Profil</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
@@ -138,6 +147,7 @@
                                     2 => 'Kesiswaan',
                                     3 => 'Guru',
                                     4 => 'Siswa/Siswi',
+                                    5 => 'Orang Tua',
                                 ];
                             @endphp
                             <div class="dropdown">
@@ -146,7 +156,8 @@
                                         <div class="user-name text-end me-3">
                                             <h6 class="mb-0 text-gray-600">{{ $user->name }}</h6>
                                             <p class="mb-0 text-sm text-gray-600">
-                                                {{ $levels[$user->level] ?? 'Tidak Diketahui' }}</p>
+                                                {{ $levels[$user->level] ?? 'Tidak Diketahui' }}
+                                            </p>
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">

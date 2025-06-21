@@ -13,23 +13,14 @@ class AdminAccountController extends Controller
 {
     public function index()
     {
-        // Ambil semua guru yang belum punya akun
-        $teachers = Teacher::whereNull('user_id')
-            ->orderBy('full_name')
-            ->get();
+        $allTeachers = Teacher::with('user')->orderBy('full_name')->get();
+        $allStudents = Student::with('user')->orderBy('full_name')->get();
 
-        // Ambil semua siswa yang belum punya akun
-        $students = Student::whereNull('user_id')
-            ->orderBy('full_name')
-            ->get();
-
-        // Ambil semua user yang sudah ada di tabel users
-        // Kita hanya mengambil kolom yang akan ditampilkan
         $users = \App\Models\User::select('id', 'name', 'email', 'level', 'created_at')
-            ->orderBy('level') // misal tampilkan guru (level 3) dulu, lalu siswa (level 4)
+            ->orderBy('level')
             ->get();
 
-        return view('admin.account', compact('teachers', 'students', 'users'));
+        return view('admin.account', compact('allTeachers', 'allStudents', 'users'));
     }
 
     public function store(Request $request)
@@ -38,7 +29,7 @@ class AdminAccountController extends Controller
             // 1. Validasi input
             $data = $request->validate([
                 'accounts'             => 'required|array',
-                'accounts.*.type'      => 'required|in:teacher,student',
+                'accounts.*.type'      => 'required|in:teacher,student,guardian',
                 'accounts.*.person_id' => 'required|integer',
                 'accounts.*.email'     => 'required|email|unique:users,email',
                 'accounts.*.password'  => 'required',
@@ -48,22 +39,53 @@ class AdminAccountController extends Controller
 
             // 2. Loop setiap baris untuk membuat user
             foreach ($data['accounts'] as $row) {
+                $type     = $row['type'];
+                $personId = $row['person_id'];
+                $email    = $row['email'];
+                $password = bcrypt($row['password']);
+
+                $relation = [];
+                $guardianOfStudentId = null;
+
+                switch ($type) {
+                    case 'teacher':
+                        $model    = Teacher::findOrFail($personId);
+                        $name     = $model->full_name;
+                        $level    = 3;
+                        $relation = ['teacher_id' => $personId];
+                        break;
+
+                    case 'student':
+                        $model    = Student::findOrFail($personId);
+                        $name     = $model->full_name;
+                        $level    = 4;
+                        $relation = ['student_id' => $personId];
+                        break;
+
+                    case 'guardian':
+                        $model    = Student::findOrFail($personId);
+                        $name     = $model->guardian_name;
+                        $level    = 5;
+                        $guardianOfStudentId = $model->id;
+                        break;
+
+                    default:
+                        continue 2;
+                }
+
                 $user = \App\Models\User::create([
-                    'name'     => ($row['type'] === 'teacher')
-                        ? Teacher::find($row['person_id'])->full_name
-                        : Student::find($row['person_id'])->full_name,
-                    'email'    => $row['email'],
-                    'password' => bcrypt($row['password']),
-                    'level'    => ($row['type'] === 'teacher') ? '3' : '4',
+                    'name'     => $name,
+                    'email'    => $email,
+                    'password' => $password,
+                    'level'    => $level,
+                    'guardian_of_student_id'  => $guardianOfStudentId,
                 ]);
 
-                // 3. Update kolom user_id pada guru/siswa
-                if ($row['type'] === 'teacher') {
-                    Teacher::where('id', $row['person_id'])
-                        ->update(['user_id' => $user->id]);
-                } else {
-                    Student::where('id', $row['person_id'])
-                        ->update(['user_id' => $user->id]);
+                if (isset($relation['teacher_id'])) {
+                    Teacher::where('id', $relation['teacher_id'])->update(['user_id' => $user->id]);
+                }
+                if (isset($relation['student_id'])) {
+                    Student::where('id', $relation['student_id'])->update(['user_id' => $user->id]);
                 }
             }
 

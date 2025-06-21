@@ -66,10 +66,12 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>
-                                        @if ($user->level == '3')
+                                        @if ($user->level == 3)
                                             Guru
-                                        @elseif ($user->level == '4')
+                                        @elseif ($user->level == 4)
                                             Siswa
+                                        @elseif ($user->level == 5)
+                                            Orang Tua
                                         @else
                                             Lainnya ({{ $user->level }})
                                         @endif
@@ -77,8 +79,7 @@
                                     <td>{{ $user->created_at->format('d-m-Y H:i') }}</td>
                                     <td>
                                         {{-- Tombol Reset Password --}}
-                                        <a href="{{ route('admin.account.reset', $user->id) }}"
-                                            class="btn btn-warning btn-sm">
+                                        <a href="{{ route('admin.account.reset', $user->id) }}" class="btn btn-warning btn-sm">
                                             <i class="bi bi-arrow-counterclockwise"></i>
                                             Reset Password
                                         </a>
@@ -126,18 +127,37 @@
                             {{-- Baris template (disembunyikan) --}}
                             <div class="row mb-2 align-items-end d-none" id="rowTemplate" data-index="__INDEX__">
                                 <div class="col-md-4">
-                                    <label for="accounts[__INDEX__][person]" class="form-label">Nama Guru/Siswa</label>
+                                    <label for="accounts[__INDEX__][person]" class="form-label">Nama Pengguna</label>
                                     <select name="accounts[__INDEX__][person]" class="form-select select2 select-person"
                                         disabled required>
-                                        <option value="" disabled selected>— Pilih Guru / Siswa —</option>
+                                        <option value="" disabled selected>— Pilih —</option>
                                         <optgroup label="Guru">
-                                            @foreach ($teachers as $t)
-                                                <option value="teacher_{{ $t->id }}">{{ $t->full_name }}</option>
+                                            @foreach ($allTeachers as $t)
+                                                <option value="teacher_{{ $t->id }}" {{ $t->user_id ? 'disabled' : '' }}>
+                                                    {{ $t->full_name }}{{ $t->user_id ? ' (sudah punya akun)' : '' }}
+                                                </option>
                                             @endforeach
                                         </optgroup>
                                         <optgroup label="Siswa">
-                                            @foreach ($students as $s)
-                                                <option value="student_{{ $s->id }}">{{ $s->full_name }}</option>
+                                            @foreach ($allStudents as $s)
+                                                <option value="student_{{ $s->id }}" {{ $s->user_id ? 'disabled' : '' }}>
+                                                    {{ $s->full_name }}{{ $s->user_id ? ' (sudah punya akun)' : '' }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                        <optgroup label="Orang Tua">
+                                            @foreach ($allStudents as $s)
+                                                @if ($s->guardian_name)
+                                                    @php
+                                                        $guardianAccountExists = \App\Models\User::where('name', $s->guardian_name)
+                                                            ->where('guardian_of_student_id', $s->id)
+                                                            ->exists();
+                                                    @endphp
+                                                    <option value="guardian_{{ $s->id }}" {{ $guardianAccountExists ? 'disabled' : '' }}>
+                                                        {{ $s->guardian_name }} (Orang Tua dari {{ $s->full_name }})
+                                                        {{ $guardianAccountExists ? ' (sudah punya akun)' : '' }}
+                                                    </option>
+                                                @endif
                                             @endforeach
                                         </optgroup>
                                     </select>
@@ -185,83 +205,62 @@
     </div>
 
     @foreach ($users as $user)
-    <!-- Modal Edit Email untuk user {{ $user->id }} -->
-    <div
-        class="modal fade"
-        id="editUserModal-{{ $user->id }}"
-        tabindex="-1"
-        aria-labelledby="editUserModalLabel-{{ $user->id }}"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="{{ route('admin.account.update', $user->id) }}" method="POST">
-                    @csrf
+        <!-- Modal Edit Email untuk user {{ $user->id }} -->
+        <div class="modal fade" id="editUserModal-{{ $user->id }}" tabindex="-1"
+            aria-labelledby="editUserModalLabel-{{ $user->id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ route('admin.account.update', $user->id) }}" method="POST">
+                        @csrf
 
-                    <div class="modal-header">
-                        <h5
-                            class="modal-title"
-                            id="editUserModalLabel-{{ $user->id }}"
-                        >
-                            Edit Email: {{ $user->name }}
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-
-                    <div class="modal-body">
-                        {{-- Tampilkan validasi error khusus untuk form ini --}}
-                        @if ($errors->has("email.$user->id") || $errors->has('email'))
-                            <div class="alert alert-danger">
-                                @if ($errors->has("email.$user->id"))
-                                    {{ $errors->first("email.$user->id") }}
-                                @else
-                                    {{ $errors->first('email') }}
-                                @endif
-                            </div>
-                        @endif
-
-                        <div class="mb-3">
-                            <label for="email-{{ $user->id }}" class="form-label">
-                                Email Baru
-                            </label>
-                            <input
-                                type="email"
-                                name="email"
-                                id="email-{{ $user->id }}"
-                                class="form-control @error('email') is-invalid @enderror"
-                                value="{{ old('email', $user->email) }}"
-                                required
-                            >
-                            @error('email')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editUserModalLabel-{{ $user->id }}">
+                                Edit Email: {{ $user->name }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                    </div>
 
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            Batal
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            Simpan Perubahan
-                        </button>
-                    </div>
-                </form>
+                        <div class="modal-body">
+                            {{-- Tampilkan validasi error khusus untuk form ini --}}
+                            @if ($errors->has("email.$user->id") || $errors->has('email'))
+                                <div class="alert alert-danger">
+                                    @if ($errors->has("email.$user->id"))
+                                        {{ $errors->first("email.$user->id") }}
+                                    @else
+                                        {{ $errors->first('email') }}
+                                    @endif
+                                </div>
+                            @endif
+
+                            <div class="mb-3">
+                                <label for="email-{{ $user->id }}" class="form-label">
+                                    Email Baru
+                                </label>
+                                <input type="email" name="email" id="email-{{ $user->id }}"
+                                    class="form-control @error('email') is-invalid @enderror"
+                                    value="{{ old('email', $user->email) }}" required>
+                                @error('email')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Batal
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                Simpan Perubahan
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-@endforeach
+    @endforeach
 
 @endsection
 
@@ -299,7 +298,7 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             let index = 0;
             const btnAddRow = document.getElementById('btnAddRow');
             const rowsContainer = document.getElementById('rowsContainer');
@@ -324,7 +323,7 @@
                 newRow.querySelectorAll('input, select').forEach(el => el.removeAttribute('disabled'));
 
                 // 5. Pasang listener untuk tombol hapus pada newRow
-                newRow.querySelector('.btnRemoveRow').addEventListener('click', function() {
+                newRow.querySelector('.btnRemoveRow').addEventListener('click', function () {
                     newRow.remove();
                 });
 
@@ -343,7 +342,7 @@
             // (Opsional) Kalau mau langsung satu baris saat modal dibuka, 
             // panggil addRow() di sini atau di event "show.bs.modal"
             // Contoh:
-            $('#tambahAkunModal').on('show.bs.modal', function() {
+            $('#tambahAkunModal').on('show.bs.modal', function () {
                 // Kosongkan dulu kalau masih ada sisa
                 rowsContainer.innerHTML = '';
                 index = 0;
@@ -354,7 +353,7 @@
 
     <script>
         // Handler memecah value "teacher_5" → type="teacher", person_id="5"
-        $(document).on('change', '.select-person', function() {
+        $(document).on('change', '.select-person', function () {
             const val = $(this).val(); // misal: "teacher_5" atau "student_10"
             if (!val) return;
 

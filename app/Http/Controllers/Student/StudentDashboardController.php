@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Admin\Announcement;
 use App\Models\Admin\Schedule;
 use App\Models\Teacher\TeacherMaterial;
+use App\Models\Admin\Student;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -15,14 +16,20 @@ class StudentDashboardController extends Controller
 {
     public function index()
     {
-        // Ambil user dengan relasi student & schoolClass sekaligus
-        $user = User::with('student.class')
-            ->findOrFail(Auth::id());
+        $user = Auth::user();
 
-        $student = $user->student;
+        // Cek apakah level 4 (siswa) atau level 5 (orang tua)
+        if ($user->level == 4) {
+            $student = $user->student;
+        } elseif ($user->level == 5) {
+            $student = Student::find($user->guardian_of_student_id);
+        } else {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
 
-        // Ambil objek Student
-        $student = $user->student;
+        if (!$student) {
+            abort(404, 'Data siswa tidak ditemukan.');
+        }
 
         // 1. Announcements Sekolah
         $announcements = Announcement::where('is_active', 1)
