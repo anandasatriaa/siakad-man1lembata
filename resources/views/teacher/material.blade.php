@@ -9,9 +9,6 @@
 @endpush
 
 @section('content')
-<div class="container">
-    <h2 class="mb-4">Daftar Materi Saya</h2>
-
     {{-- Pesan sukses --}}
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show">
@@ -20,78 +17,94 @@
         </div>
     @endif
 
-    {{-- Tombol Tambah Materi --}}
-    <div class="mb-3 text-end">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAdd">
-            <i class="bi bi-plus-circle me-1"></i> Tambah Materi
-        </button>
-    </div>
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Daftar Materi Saya</h3>
+                    <p class="text-subtitle text-muted">Semua informasi materi berada di sini</p>
+                </div>
+            </div>
+        </div>
+        <section class="section">
+            <div class="card">
+                <div class="card-body">
+                    {{-- Tombol Tambah Materi --}}
+                    <div class="mb-3 text-end">
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAdd">
+                            <i class="bi bi-plus-circle me-1"></i> Tambah Materi
+                        </button>
+                    </div>
 
-    {{-- 1) Tabel List Materi --}}
-    <div class="table-responsive">
-        <table class="table table-striped table-hover align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>No</th>
-                    <th>Judul</th>
-                    <th>Kelas</th>
-                    <th>Mata Pelajaran</th>
-                    <th>Deskripsi</th>
-                    <th>File</th>
-                    <th>Diunggah</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($materials as $index => $mat)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $mat->title }}</td>
-                        <td>{{ $mat->classroom ? $mat->classroom->name : '-' }}</td>
-                        <td>{{ $mat->course ? $mat->course->name : '-' }}</td>
-                        <td>{!! \Illuminate\Support\Str::limit($mat->description, 50, '...') !!}</td>
-                        <td>
-                            <a href="{{ asset('storage/' . $mat->file_path) }}" target="_blank" class="btn btn-sm btn-success">
-                                <i class="bi bi-file-earmark-arrow-down-fill me-1"></i> Unduh
-                            </a>
-                        </td>
-                        <td>{{ $mat->published_at ? $mat->published_at->format('d-m-Y H:i') : '-' }}</td>
-                        <td>
-                            {{-- Tombol Edit --}}
-                            <button class="btn btn-sm btn-warning btn-edit"
-                                data-id="{{ $mat->id }}"
-                                data-title="{{ $mat->title }}"
-                                data-class_id="{{ $mat->class_id }}"
-                                data-course_id="{{ $mat->course_id }}"
-                                data-description="{{ $mat->description }}"
-                                data-file_path="{{ $mat->file_path }}"
-                                data-file_type="{{ $mat->file_type }}"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalEdit">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
+                    {{-- 1) Tabel List Materi --}}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Judul</th>
+                                    <th>Kelas</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Deskripsi</th>
+                                    <th>File</th>
+                                    <th>Diunggah</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($materials as $index => $mat)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $mat->title }}</td>
+                                        <td>{{ $mat->classroom ? $mat->classroom->name : '-' }}</td>
+                                        <td>{{ $mat->course ? $mat->course->name : '-' }}</td>
+                                        <td>{!! \Illuminate\Support\Str::limit($mat->description, 50, '...') !!}</td>
+                                        <td>
+                                            <a href="{{ asset('storage/' . $mat->file_path) }}" target="_blank" class="btn btn-sm btn-success">
+                                                <i class="bi bi-file-earmark-arrow-down-fill me-1"></i> Unduh
+                                            </a>
+                                        </td>
+                                        <td>{{ $mat->published_at 
+                                            ? \Carbon\Carbon::parse($mat->published_at)->format('d-m-Y H:i') 
+                                            : '-' }}</td>
+                                        <td>
+                                            {{-- Tombol Edit --}}
+                                            <button class="btn btn-sm btn-warning btn-edit"
+                                                data-id="{{ $mat->id }}"
+                                                data-title="{{ $mat->title }}"
+                                                data-class_id="{{ $mat->class_id }}"
+                                                data-course_id="{{ $mat->course_id }}"
+                                                data-description="{{ $mat->description }}"
+                                                data-file_path="{{ $mat->file_path }}"
+                                                data-file_type="{{ $mat->file_type }}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalEdit">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
 
-                            {{-- Tombol Hapus --}}
-                            <form action="{{ route('teacher.material.destroy', $mat->id) }}" method="POST" class="d-inline-block"
-                                  onsubmit="return confirm('Yakin ingin menghapus materi ini?');">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="8" class="text-center text-muted">
-                            Belum ada materi yang diunggah.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                                            {{-- Tombol Hapus --}}
+                                            <form action="{{ route('teacher.material.destroy', $mat->id) }}" method="POST" class="d-inline-block delete-material-form">
+                                                @csrf
+                                                <button type="button" class="btn btn-sm btn-danger btn-delete">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted">
+                                            Belum ada materi yang diunggah.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-</div>
 
 {{-- ================================================================= --}}
 {{-- 2) Modal Add Materi --}}
@@ -165,12 +178,12 @@
                     {{-- File --}}
                     <div class="mb-3">
                         <label for="addFile" class="form-label">Upload File <span class="text-danger">*</span></label>
-                        <input type="file" name="file" id="addFile"
+                        <input type="file" name="file" id="addFile" accept="application/pdf,application/doc,application/docx,application/ppt,application/pptx,application/zip"
                                class="form-control @error('file') is-invalid @enderror" required>
                         @error('file')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="form-text">Format: pdf|doc|docx|ppt|pptx|zip (maks 10MB)</div>
+                        <div class="form-text">Format: pdf | doc | docx | ppt | pptx | zip (maks 10MB)</div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -241,7 +254,7 @@
                         <label for="editFile" class="form-label">Ganti File (opsional)</label>
                         <input type="file" name="file" id="editFile" class="form-control">
                         <div class="form-text">
-                            Upload file baru jika ingin mengganti (format: pdf|doc|ppt|zip, maks 10MB).
+                            Upload file baru jika ingin mengganti (Format: pdf | doc | docx | ppt | pptx | zip (maks 10MB)).
                         </div>
                     </div>
                 </div>
@@ -321,5 +334,30 @@
             });
         });
     });
+</script>
+
+{{-- Confirm Delete --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-delete').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const form = this.closest('.delete-material-form');
+            Swal.fire({
+                title: 'Yakin ingin menghapus materi ini?',
+                text: "Data akan hilang secara permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+});
 </script>
 @endpush

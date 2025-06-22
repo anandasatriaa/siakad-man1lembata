@@ -32,7 +32,7 @@
         @endif
 
         <section class="row">
-            <div class="col-12 col-lg-9">
+            <div class="col-12 col-lg-12">
                 <div class="row">
                     <div class="col-6 col-lg-3 col-md-6">
                         <div class="card">
@@ -137,14 +137,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-lg-3">
-                {{-- Alerts --}}
-                @foreach($alerts as $key => $count)
-                <div class="alert alert-{{ $count ? 'danger' : 'success' }}">
-                    {{ ucwords(str_replace('_',' ', $key)) }}: <strong>{{ $count }}</strong>
-                </div>
-                @endforeach
             </div>
         </section>
     </div>

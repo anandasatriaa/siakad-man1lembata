@@ -252,7 +252,7 @@
                                 <select class="form-select select2" id="students" name="students[]" multiple="multiple"
                                     required>
                                     @foreach ($students as $student)
-                                        <option value="{{ $student->id }}">{{ $student->full_name }}</option>
+                                        <option value="{{ $student->id }}">({{ $student->nis }}) {{ $student->full_name }}</option>
                                     @endforeach
                                 </select>
                                 <small class="text-muted">Pilih satu atau lebih siswa dari daftar.</small>

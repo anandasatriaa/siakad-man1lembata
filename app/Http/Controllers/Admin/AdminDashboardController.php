@@ -56,22 +56,12 @@ class AdminDashboardController extends Controller
         $newRegistrations = Student::whereBetween('created_at', [Carbon::now()->subDays(7), Carbon::now()])->count()
                              + Teacher::whereBetween('created_at', [Carbon::now()->subDays(7), Carbon::now()])->count();
 
-        // 6. Alerts
-        $alerts = [
-            'studentsNoAccount'   => Student::whereNull('user_id')->count(),
-            'inactiveTeachers'    => Teacher::where('status','inactive')->count(),
-            'incompleteSchedules' => Schedule::whereNull('course_id')
-                                            ->orWhereNull('teacher_id')
-                                            ->count(),
-        ];
-
         return view('admin.dashboard', compact(
             'announcements',
             'totalStudents','totalTeachers','totalClasses','totalCourses','newMaterials',
             'todaySchedules',
             'genderDistribution','classesWithCount',
             'recentMaterials','newRegistrations',
-            'alerts'
         ));
     }
 }

@@ -26,6 +26,12 @@ class TeacherMaterial extends Model
         'published_at',
     ];
 
+    protected $casts = [
+        'published_at' => 'datetime',
+        'created_at'   => 'datetime',
+        'updated_at'   => 'datetime',
+    ];
+
     // Relasi ke User (guru)
     public function teacher()
     {

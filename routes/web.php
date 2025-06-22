@@ -17,6 +17,9 @@ use App\Http\Controllers\Teacher\TeacherDashboardController;
 use App\Http\Controllers\Teacher\TeacherMaterialController;
 use App\Http\Controllers\Teacher\TeacherClassController;
 use App\Http\Controllers\Teacher\TeacherGradeController;
+use App\Http\Controllers\Teacher\TeacherAnnouncementController;
+use App\Http\Controllers\Teacher\TeacherScheduleController;
+use App\Http\Controllers\Teacher\TeacherProfileController;
 
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Student\StudentScheduleController;
@@ -115,7 +118,9 @@ Route::prefix('kesiswaan')->middleware(['auth', 'level:2'])->group(function () {
 
 // Guru routes
 Route::prefix('guru')->middleware(['auth', 'level:3'])->group(function () {
-    Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+    Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard.index');
+
+    Route::get('/announcement', [TeacherAnnouncementController::class, 'index'])->name('teacher.announcement.index');
 
     Route::get('/material', [TeacherMaterialController::class, 'index'])->name('teacher.material.index');
     Route::post('/material/store', [TeacherMaterialController::class, 'store'])->name('teacher.material.store');

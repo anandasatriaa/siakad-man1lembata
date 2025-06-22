@@ -8,36 +8,53 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Admin\Schedule;
 use App\Models\Admin\Teacher;
 use Illuminate\Support\Facades\Log;
+use App\Models\Admin\Announcement;
+use App\Models\Admin\Course;
+use App\Models\Admin\SchoolClass;
+use App\Models\Admin\Student;
+use Carbon\Carbon;
+use App\Models\Teacher\TeacherMaterial;
 
 class TeacherDashboardController extends Controller
 {
     public function index()
     {
-        // 1) Ambil user_id dari Auth
         $userId = Auth::id();
-        Log::info("TeacherDashboardController@index → Authenticated user_id: {$userId}");
+        $teacher = Teacher::where('user_id', $userId)->firstOrFail();
 
-        // 2) Cari data Teacher berdasarkan kolom user_id
-        $teacher = Teacher::where('user_id', $userId)->first();
+        // 1) Pengumuman aktif
+        $announcements = Announcement::where('is_active',1)
+                                     ->latest()
+                                     ->take(5)
+                                     ->get();
 
-        if (! $teacher) {
-            // Kalau tidak ditemukan, kita log error dan bisa abort atau redirect
-            Log::error("TeacherDashboardController@index → Tidak ditemukan record teacher untuk user_id: {$userId}");
-            abort(403, 'Data guru tidak ditemukan untuk akun ini.');
-        }
-
-        // 3) Kalau ditemukan, kita dapatkan teacher_id
-        $teacherId = $teacher->id;
-        Log::info("TeacherDashboardController@index → Found teacher_id: {$teacherId} for user_id: {$userId}");
-
-        // 4) Sekarang gunakan $teacherId untuk ambil jadwal
-        $schedules = Schedule::with(['class', 'course'])
-            ->where('teacher_id', $teacherId)
-            ->orderByRaw("FIELD(day, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')")
+        // 2) Jadwal hari ini
+        $today = Carbon::now()->translatedFormat('l');
+        $schedules = Schedule::with(['schoolClass','course'])
+            ->where('teacher_id', $teacher->id)
+            ->where('day', $today)
             ->orderBy('start_time')
-            ->get()
-            ->groupBy('day');
+            ->get();
 
-        return view('teacher.dashboard', compact('schedules'));
+        // 3) Ringkasan
+        $classesTaught = SchoolClass::whereIn('id',
+            Schedule::where('teacher_id',$teacher->id)
+                    ->pluck('class_id')->unique()
+        )->count();
+        $studentsCount = Student::whereIn('class_id',
+            Schedule::where('teacher_id',$teacher->id)
+                    ->pluck('class_id')->unique()
+        )->count();
+
+        // 4) Materi terbaru
+        $materials = TeacherMaterial::where('teacher_id', $teacher->id)
+                                    ->latest('published_at')
+                                    ->take(5)
+                                    ->get();
+
+        return view('teacher.dashboard', compact(
+            'announcements','schedules',
+            'classesTaught','studentsCount','materials'
+        ));
     }
 }

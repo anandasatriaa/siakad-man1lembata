@@ -44,7 +44,7 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo d-flex align-items-center">
-                            <a href="{{ route('teacher.dashboard') }}">
+                            <a href="{{ route('teacher.dashboard.index') }}">
                                 <img src="{{ asset('assets/images/logo/logo-lembata.png') }}" alt="Logo">
                             </a>
                             <div class="ms-2 lh-sm">
@@ -62,10 +62,19 @@
                         <li class="sidebar-title">Menu</li>
 
                         {{-- Dashboard --}}
-                        <li class="sidebar-item {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
-                            <a href="{{ route('teacher.dashboard') }}" class="sidebar-link">
+                        <li class="sidebar-item {{ request()->routeIs('teacher.dashboard.index') ? 'active' : '' }}">
+                            <a href="{{ route('teacher.dashboard.index') }}" class="sidebar-link">
                                 <i class="bi bi-grid-fill"></i>
                                 <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        {{-- Pengumuman --}}
+                        <li
+                            class="sidebar-item {{ request()->routeIs('teacher.announcement.index') ? 'active' : '' }}">
+                            <a href="{{ route('teacher.announcement.index') }}" class="sidebar-link">
+                                <i class="bi bi-megaphone-fill"></i>
+                                <span>Pengumuman</span>
                             </a>
                         </li>
 
