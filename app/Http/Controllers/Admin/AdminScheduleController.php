@@ -69,4 +69,55 @@ class AdminScheduleController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan jadwal: ' . $e->getMessage());
         }
     }
+
+    public function edit(SchoolClass $id)
+    {
+        $classes  = SchoolClass::all();       // untuk dropdown (kelas lain jika perlu)
+        $courses  = Course::all();
+        $teachers = Teacher::where('status', 'active')->get();
+        $days     = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+
+        // ambil semua jadwal milik kelas ini
+        $schedules = $id->schedules()->orderBy('day')->orderBy('start_time')->get();
+
+        return view('admin.schedule.index', compact(
+            'class','classes','courses','teachers','days','schedules'
+        ));
+    }
+
+    public function update(Request $request, SchoolClass $id)
+    {
+        $request->validate([
+            'days'        => 'required|array',
+            'course_ids'  => 'required|array',
+            'teacher_ids' => 'required|array',
+            'start_times' => 'required|array',
+            'end_times'   => 'required|array',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Hapus semua jadwal lama
+            $id->schedules()->delete();
+
+            // Masukkan ulang berdasarkan input
+            foreach ($request->days as $i => $day) {
+                $id->schedules()->create([
+                    'class_id'   => $id->id,
+                    'day'        => $day,
+                    'course_id'  => $request->course_ids[$i]  === 'istirahat' ? null : $request->course_ids[$i],
+                    'teacher_id' => $request->course_ids[$i]  === 'istirahat' ? null : $request->teacher_ids[$i],
+                    'start_time' => $request->start_times[$i],
+                    'end_time'   => $request->end_times[$i],
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('admin.schedule.index')
+                             ->with('success','Jadwal berhasil di‑update.');
+        } catch(\Exception $e) {
+            DB::rollBack();
+            return back()->withError('Gagal update jadwal: '.$e->getMessage());
+        }
+    }
 }
