@@ -8,6 +8,7 @@ use App\Models\Admin\Student;
 use App\Models\Admin\Classroom;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class AdminStudentController extends Controller
 {
@@ -116,20 +117,37 @@ class AdminStudentController extends Controller
 
     public function destroy($id)
     {
-        $student = Student::findOrFail($id);
+        // Gunakan transaction agar atomic
+        DB::beginTransaction();
 
         try {
-            // Hapus foto jika ada
+            $student = Student::with('user')->findOrFail($id);
+
+            // 1) Hapus foto siswa jika ada
             if ($student->photo && Storage::disk('public')->exists($student->photo)) {
                 Storage::disk('public')->delete($student->photo);
             }
 
-            // Hapus data siswa
+            // 2) Hapus akun user terkait (jika ada)
+            if ($student->user) {
+                $student->user->delete();
+            }
+
+            // 3) Hapus record siswa
             $student->delete();
 
-            return response()->json(['success' => true, 'message' => 'Data siswa berhasil dihapus.']);
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data siswa dan akun user berhasil dihapus.'
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Terjadi kesalahan saat menghapus data.']);
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menghapus: ' . $e->getMessage()
+            ], 500);
         }
     }
 }

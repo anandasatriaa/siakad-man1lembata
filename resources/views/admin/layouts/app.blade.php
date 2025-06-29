@@ -198,13 +198,13 @@
                             </li>
                         @endif
 
-                        {{-- Hanya untuk admin: menu “Setting” dan “Akun & Password” --}}
+                        {{-- Hanya untuk admin: menu “Setting” dan “Kelola Akun” --}}
                         @if (auth()->user()->level == 1)
                             <li class="sidebar-title">Setting</li>
                             <li class="sidebar-item {{ request()->routeIs('admin.account.*') ? 'active' : '' }}">
                                 <a href="{{ route('admin.account.index') }}" class="sidebar-link">
                                     <i class="bi bi-shield-lock-fill"></i>
-                                    <span>Akun & Password</span>
+                                    <span>Kelola Akun</span>
                                 </a>
                             </li>
                         @endif
