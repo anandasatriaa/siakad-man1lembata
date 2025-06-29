@@ -83,6 +83,7 @@ class AdminClassController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'name'       => 'required|string|max:255',
             'teacher_id' => 'required|exists:teachers,id',
             'students' => 'required|array',
             'students.*' => 'exists:students,id',
@@ -92,25 +93,30 @@ class AdminClassController extends Controller
         try {
             $class = SchoolClass::findOrFail($id);
 
-            // Reset guru lama (jika ada)
-            Teacher::where('class_id', $class->id)->update(['class_id' => null]);
+            // 1) Update nama kelas
+            $class->name = $request->input('name');
+            $class->save();
 
-            // Set guru baru
+            // 2) Reset wali dan siswa lama
+            Teacher::where('class_id', $class->id)->update(['class_id' => null]);
+            Student::where('class_id', $class->id)->update(['class_id' => null]);
+
+            // 3) Set guru baru
             $newTeacher = Teacher::findOrFail($request->teacher_id);
             $newTeacher->class_id = $class->id;
             $newTeacher->save();
 
-            // Reset semua siswa lama di kelas ini
-            Student::where('class_id', $class->id)->update(['class_id' => null]);
-
-            // Set siswa baru
-            Student::whereIn('id', $request->students)->update(['class_id' => $class->id]);
+            // 4) Set siswa baru
+            Student::whereIn('id', $request->students)
+                ->update(['class_id' => $class->id]);
 
             DB::commit();
-            return redirect()->route('admin.class.index')->with('success', 'Data kelas berhasil diperbarui.');
+
+            return redirect()->route('admin.class.index')
+                ->with('success', 'Data kelas berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

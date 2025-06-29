@@ -140,8 +140,8 @@
                                                         <div class="modal-body">
                                                             <div class="mb-3">
                                                                 <label class="form-label">Nama Kelas</label>
-                                                                <input type="text" class="form-control"
-                                                                    value="{{ $class->name }}" readonly>
+                                                                <input type="text" class="form-control" name="name"
+                                                                    value="{{ old('name', $class->name) }}" required>
                                                             </div>
 
                                                             <div class="mb-3">
