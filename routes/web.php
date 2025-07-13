@@ -74,6 +74,8 @@ Route::prefix('admin')->middleware(['auth', 'level:1'])->group(function () {
     Route::post('/announcement/destroy/{id}', [AdminAnnouncementController::class, 'destroy'])->name('admin.announcement.destroy');
 
     Route::get('/grade', [AdminGradeController::class, 'index'])->name('admin.grade.index');
+    Route::get('/grade/students-by-class/{classId}', [AdminGradeController::class, 'getStudentsByClass'])->name('admin.grade.students-by-class');
+
 
     Route::get('/schedule', [AdminScheduleController::class, 'index'])->name('admin.schedule.index');
     Route::post('/schedule/store', [AdminScheduleController::class, 'store'])->name('admin.schedule.store');

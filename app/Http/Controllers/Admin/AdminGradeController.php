@@ -13,14 +13,16 @@ class AdminGradeController extends Controller
 {
     public function index(Request $request)
     {
-        // 1) Data filter
-        $classes  = SchoolClass::all();
-        $students = Student::whereNotNull('class_id')->get();
-
-        // 2) Ambil filter dari request
+        // 1) Ambil filter dari request lebih dahulu
         $classId   = $request->input('class_id');
         $studentId = $request->input('student_id');
         $semester  = $request->input('semester'); // bisa 1 / 2
+
+        // 2) Data filter
+        $classes  = SchoolClass::all();
+        $students = $classId
+            ? Student::where('class_id', $classId)->get()
+            : Student::whereNotNull('class_id')->get();
 
         $gradeRecords = collect();
         $selectedStudent = null;
@@ -95,6 +97,27 @@ class AdminGradeController extends Controller
             ]);
         }
 
+        if ($classId && !$studentId) {
+            $studentsInClass = Student::where('class_id', $classId)->get();
+
+            $studentIds = $studentsInClass->pluck('id');
+
+            $gradeRecords = Grade::with(['course', 'teacher', 'student'])
+                ->whereIn('student_id', $studentIds)
+                ->get();
+
+            $data['studentsInClass'] = $studentsInClass;
+            $data['gradeRecords'] = $gradeRecords;
+        }
+
+
         return view('admin.grade', $data);
+    }
+
+    public function getStudentsByClass($classId)
+    {
+        $students = Student::where('class_id', $classId)->get();
+
+        return response()->json($students);
     }
 }
