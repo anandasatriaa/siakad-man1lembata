@@ -387,159 +387,332 @@
                     <h3>Nilai</h3>
                     <p class="text-subtitle text-muted">Semua informasi mengenai Nilai</p>
                 </div>
-                {{-- <div class="col-12 col-md-6 order-md-2 order-first text-md-end text-start mb-2 mb-md-0">
-                    <button type="button" class="btn btn-primary rounded-pill d-inline-flex align-items-center"
-                        data-bs-toggle="modal" data-bs-target="#addAnnouncementModal">
-                        <i class="bi bi-plus-circle me-2"></i>
-                        <span>Tambah Pengumuman</span>
-                    </button>
-                </div> --}}
             </div>
         </div>
         <div class="section">
 
-            <div class="container">
-                <div class="content">
-                    <div class="content-header">
-                        <h2><i class="fas fa-chart-bar"></i> Laporan Nilai Akademik</h2>
-                        <div>
-                            <button class="btn btn-print"><i class="fas fa-print"></i> Cetak Laporan</button>
-                            <button class="btn"><i class="fas fa-download"></i> Export Excel</button>
-                        </div>
+            <div class="content">
+                <div class="content-header">
+                    <h2><i class="fas fa-chart-bar"></i> Laporan Nilai Akademik</h2>
+                    <div>
+                        <button class="btn btn-print"><i class="fas fa-print"></i> Cetak Laporan</button>
+                        <button class="btn"><i class="fas fa-download"></i> Export Excel</button>
+                    </div>
+                </div>
+
+                {{-- <div class="filters">
+                    <div class="filter-group">
+                        <label for="tahun-ajaran">Tahun Ajaran</label>
+                        <select id="tahun-ajaran">
+                            <option>2023/2024</option>
+                            <option>2022/2023</option>
+                            <option>2021/2022</option>
+                        </select>
                     </div>
 
-                    <div class="filters">
-                        <div class="filter-group">
-                            <label for="tahun-ajaran">Tahun Ajaran</label>
-                            <select id="tahun-ajaran">
-                                <option>2023/2024</option>
-                                <option>2022/2023</option>
-                                <option>2021/2022</option>
-                            </select>
-                        </div>
-
-                        <div class="filter-group">
-                            <label for="semester">Semester</label>
-                            <select id="semester">
-                                <option>Semester 1 (Ganjil)</option>
-                                <option>Semester 2 (Genap)</option>
-                            </select>
-                        </div>
-
-                        <div class="filter-group">
-                            <label for="kelas">Kelas</label>
-                            <select id="kelas">
-                                <option>Semua Kelas</option>
-                                <option>10 IPA 1</option>
-                                <option>10 IPA 2</option>
-                                <option>10 IPS 1</option>
-                                <option>10 IPS 2</option>
-                                <option>11 IPA 1</option>
-                                <option>11 IPS 1</option>
-                                <option>12 IPA 1</option>
-                                <option>12 IPS 1</option>
-                            </select>
-                        </div>
-
-                        <div class="filter-group">
-                            <label for="siswa">Cari Siswa</label>
-                            <input type="text" id="siswa" placeholder="Nama atau NIS siswa">
-                        </div>
-
-                        <div class="filter-group full-row">
-                            <label for="mata-pelajaran">Mata Pelajaran</label>
-                            <select id="mata-pelajaran">
-                                <option>Semua Mata Pelajaran</option>
-                                <option>Matematika</option>
-                                <option>Fisika</option>
-                                <option>Kimia</option>
-                                <option>Biologi</option>
-                                <option>Bahasa Inggris</option>
-                                <option>Bahasa Indonesia</option>
-                                <option>Sejarah</option>
-                                <option>Ekonomi</option>
-                            </select>
-                        </div>
-
-                        <div class="filter-group">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-search"><i class="fas fa-search"></i> Tampilkan</button>
-                        </div>
+                    <div class="filter-group">
+                        <label for="semester">Semester</label>
+                        <select id="semester">
+                            <option>Semester 1 (Ganjil)</option>
+                            <option>Semester 2 (Genap)</option>
+                        </select>
                     </div>
 
-                    <div class="student-list">
-                        <div class="student-card active">
-                            <div class="student-card-header">
-                                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Siswa">
-                                <div>
-                                    <div class="student-card-name">Diana Putri</div>
-                                    <div class="student-card-class">10 IPA 2 | NIS: 20231002</div>
-                                </div>
-                            </div>
-                            <div class="student-card-details">
-                                <div class="student-card-detail">
-                                    <div class="label">Rata-rata</div>
-                                    <div class="value">81.7</div>
-                                </div>
-                                <div class="student-card-detail">
-                                    <div class="label">Peringkat</div>
-                                    <div class="value">5</div>
-                                </div>
+                    <div class="filter-group">
+                        <label for="kelas">Kelas</label>
+                        <select id="kelas">
+                            <option>Semua Kelas</option>
+                            <option>10 IPA 1</option>
+                            <option>10 IPA 2</option>
+                            <option>10 IPS 1</option>
+                            <option>10 IPS 2</option>
+                            <option>11 IPA 1</option>
+                            <option>11 IPS 1</option>
+                            <option>12 IPA 1</option>
+                            <option>12 IPS 1</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="siswa">Cari Siswa</label>
+                        <input type="text" id="siswa" placeholder="Nama atau NIS siswa">
+                    </div>
+
+                    <div class="filter-group full-row">
+                        <label for="mata-pelajaran">Mata Pelajaran</label>
+                        <select id="mata-pelajaran">
+                            <option>Semua Mata Pelajaran</option>
+                            <option>Matematika</option>
+                            <option>Fisika</option>
+                            <option>Kimia</option>
+                            <option>Biologi</option>
+                            <option>Bahasa Inggris</option>
+                            <option>Bahasa Indonesia</option>
+                            <option>Sejarah</option>
+                            <option>Ekonomi</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-search"><i class="fas fa-search"></i> Tampilkan</button>
+                    </div>
+                </div>
+
+                <div class="student-list">
+                    <div class="student-card active">
+                        <div class="student-card-header">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Siswa">
+                            <div>
+                                <div class="student-card-name">Diana Putri</div>
+                                <div class="student-card-class">10 IPA 2 | NIS: 20231002</div>
                             </div>
                         </div>
-
-                        <div class="student-card">
-                            <div class="student-card-header">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Siswa">
-                                <div>
-                                    <div class="student-card-name">Budi Santoso</div>
-                                    <div class="student-card-class">10 IPA 2 | NIS: 20231005</div>
-                                </div>
+                        <div class="student-card-details">
+                            <div class="student-card-detail">
+                                <div class="label">Rata-rata</div>
+                                <div class="value">81.7</div>
                             </div>
-                            <div class="student-card-details">
-                                <div class="student-card-detail">
-                                    <div class="label">Rata-rata</div>
-                                    <div class="value">78.2</div>
-                                </div>
-                                <div class="student-card-detail">
-                                    <div class="label">Peringkat</div>
-                                    <div class="value">12</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="student-card">
-                            <div class="student-card-header">
-                                <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="Siswa">
-                                <div>
-                                    <div class="student-card-name">Siti Rahmawati</div>
-                                    <div class="student-card-class">10 IPA 1 | NIS: 20231011</div>
-                                </div>
-                            </div>
-                            <div class="student-card-details">
-                                <div class="student-card-detail">
-                                    <div class="label">Rata-rata</div>
-                                    <div class="value">85.5</div>
-                                </div>
-                                <div class="student-card-detail">
-                                    <div class="label">Peringkat</div>
-                                    <div class="value">2</div>
-                                </div>
+                            <div class="student-card-detail">
+                                <div class="label">Peringkat</div>
+                                <div class="value">5</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Daftar Nilai Siswa: <span class="student-name">Diana Putri</span> (10 IPA
-                                2)</h3>
-                            <select class="semester-select">
-                                <option>Semester 1</option>
-                                <option>Semester 2</option>
+                    <div class="student-card">
+                        <div class="student-card-header">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Siswa">
+                            <div>
+                                <div class="student-card-name">Budi Santoso</div>
+                                <div class="student-card-class">10 IPA 2 | NIS: 20231005</div>
+                            </div>
+                        </div>
+                        <div class="student-card-details">
+                            <div class="student-card-detail">
+                                <div class="label">Rata-rata</div>
+                                <div class="value">78.2</div>
+                            </div>
+                            <div class="student-card-detail">
+                                <div class="label">Peringkat</div>
+                                <div class="value">12</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="student-card">
+                        <div class="student-card-header">
+                            <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="Siswa">
+                            <div>
+                                <div class="student-card-name">Siti Rahmawati</div>
+                                <div class="student-card-class">10 IPA 1 | NIS: 20231011</div>
+                            </div>
+                        </div>
+                        <div class="student-card-details">
+                            <div class="student-card-detail">
+                                <div class="label">Rata-rata</div>
+                                <div class="value">85.5</div>
+                            </div>
+                            <div class="student-card-detail">
+                                <div class="label">Peringkat</div>
+                                <div class="value">2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Daftar Nilai Siswa: <span class="student-name">Diana Putri</span> (10 IPA
+                            2)</h3>
+                        <select class="semester-select">
+                            <option>Semester 1</option>
+                            <option>Semester 2</option>
+                        </select>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mata Pelajaran</th>
+                                <th>Guru Pengampu</th>
+                                <th>Nilai Tugas</th>
+                                <th>Nilai UTS</th>
+                                <th>Nilai UAS</th>
+                                <th>Nilai Akhir</th>
+                                <th>Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div>Matematika</div>
+                                    <div class="subject-code">MTK-101</div>
+                                </td>
+                                <td>Bpk. Ahmad Surya, S.Pd</td>
+                                <td class="score">85</td>
+                                <td class="score">78</td>
+                                <td class="score">88</td>
+                                <td class="score">84</td>
+                                <td><span class="grade A">A</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>Fisika</div>
+                                    <div class="subject-code">FIS-102</div>
+                                </td>
+                                <td>Ibu Siti Rahayu, M.Pd</td>
+                                <td class="score">92</td>
+                                <td class="score">85</td>
+                                <td class="score">90</td>
+                                <td class="score">89</td>
+                                <td><span class="grade A">A</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>Kimia</div>
+                                    <div class="subject-code">KIM-103</div>
+                                </td>
+                                <td>Ibu Rina Wijaya, S.Si</td>
+                                <td class="score">78</td>
+                                <td class="score">80</td>
+                                <td class="score">75</td>
+                                <td class="score">78</td>
+                                <td><span class="grade B">B</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>Biologi</div>
+                                    <div class="subject-code">BIO-104</div>
+                                </td>
+                                <td>Bpk. Budi Santoso, M.Pd</td>
+                                <td class="score">82</td>
+                                <td class="score">76</td>
+                                <td class="score">80</td>
+                                <td class="score">79</td>
+                                <td><span class="grade B">B</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>Bahasa Inggris</div>
+                                    <div class="subject-code">BIG-105</div>
+                                </td>
+                                <td>Ibu Maya Indah, S.Pd</td>
+                                <td class="score">88</td>
+                                <td class="score">85</td>
+                                <td class="score">90</td>
+                                <td class="score">88</td>
+                                <td><span class="grade A">A</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>Bahasa Indonesia</div>
+                                    <div class="subject-code">BIN-106</div>
+                                </td>
+                                <td>Bpk. Agus Setiawan, S.Pd</td>
+                                <td class="score">75</td>
+                                <td class="score">70</td>
+                                <td class="score">72</td>
+                                <td class="score">72</td>
+                                <td><span class="grade B">B</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="summary">
+                    <div class="summary-card">
+                        <h3>Rata-rata Nilai</h3>
+                        <div class="summary-value">81.7</div>
+                        <div class="summary-description">Dari 6 mata pelajaran</div>
+                    </div>
+
+                    <div class="summary-card">
+                        <h3>Nilai Tertinggi</h3>
+                        <div class="summary-value">89</div>
+                        <div class="summary-description">Mata Pelajaran Fisika</div>
+                    </div>
+
+                    <div class="summary-card">
+                        <h3>Nilai Terendah</h3>
+                        <div class="summary-value">72</div>
+                        <div class="summary-description">Mata Pelajaran Bahasa Indonesia</div>
+                    </div>
+
+                    <div class="summary-card">
+                        <h3>Peringkat Kelas</h3>
+                        <div class="summary-value">5</div>
+                        <div class="summary-description">Dari 30 siswa</div>
+                    </div>
+                </div> --}}
+
+                {{-- Filter form --}}
+                <form method="GET" action="{{ route('admin.grade.index') }}" class="filters">
+                    {{-- Tahun Ajaran: ... --}}
+                    {{-- Semester --}}
+                    <select name="semester" id="semester">
+                        <option value="1" {{ $semester == 1 ? 'selected' : '' }}>Semester 1 (Ganjil)</option>
+                        <option value="2" {{ $semester == 2 ? 'selected' : '' }}>Semester 2 (Genap)</option>
+                    </select>
+                    {{-- Kelas --}}
+                    <select name="class_id" id="kelas">
+                        <option value="">Semua Kelas</option>
+                        @foreach($classes as $cls)
+                            <option value="{{ $cls->id }}" {{ $classId == $cls->id ? 'selected' : '' }}>
+                                {{ $cls->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    {{-- Cari Siswa --}}
+                    <select name="student_id" id="siswa">
+                        <option value="">Pilih Siswa</option>
+                        @foreach($students as $std)
+                            <option value="{{ $std->id }}" {{ optional($selectedStudent)->id == $std->id ? 'selected' : '' }}>
+                                {{ $std->full_name }} ({{ $std->nis }})
+                            </option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="btn btn-search">Tampilkan</button>
+                </form>
+
+                @if($selectedStudent)
+                    {{-- Card Siswa --}}
+                    <div class="student-card active">
+                        <div class="student-card-header">
+                            <img src="{{ $selectedStudent->photo_url }}" alt="Siswa">
+                            <div>
+                                <div class="student-card-name">{{ $selectedStudent->full_name }}</div>
+                                <div class="student-card-class">
+                                    {{ $selectedStudent->class->name }} | NIS: {{ $selectedStudent->nis }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="student-card-details">
+                            <div class="student-card-detail">
+                                <div class="label">Rata-rata</div>
+                                <div class="value">{{ number_format($average, 2) }}</div>
+                            </div>
+                            <div class="student-card-detail">
+                                <div class="label">Peringkat</div>
+                                <div class="value">{{ $rank }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Tabel Nilai --}}
+                    <div class="card mt-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title">
+                                Daftar Nilai Siswa: {{ $selectedStudent->full_name }}
+                                ({{ $selectedStudent->class->name }})
+                            </h3>
+                            <select class="semester-select"
+                                onchange="location.search='?semester='+this.value+'&class_id='+{{ $classId }}+'&student_id='+{{ $selectedStudent->id }}">
+                                <option value="1" {{ $semester == 1 ? 'selected' : '' }}>Semester 1</option>
+                                <option value="2" {{ $semester == 2 ? 'selected' : '' }}>Semester 2</option>
                             </select>
                         </div>
-
-                        <table>
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Mata Pelajaran</th>
@@ -552,108 +725,69 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <div>Matematika</div>
-                                        <div class="subject-code">MTK-101</div>
-                                    </td>
-                                    <td>Bpk. Ahmad Surya, S.Pd</td>
-                                    <td class="score">85</td>
-                                    <td class="score">78</td>
-                                    <td class="score">88</td>
-                                    <td class="score">84</td>
-                                    <td><span class="grade A">A</span></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>Fisika</div>
-                                        <div class="subject-code">FIS-102</div>
-                                    </td>
-                                    <td>Ibu Siti Rahayu, M.Pd</td>
-                                    <td class="score">92</td>
-                                    <td class="score">85</td>
-                                    <td class="score">90</td>
-                                    <td class="score">89</td>
-                                    <td><span class="grade A">A</span></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>Kimia</div>
-                                        <div class="subject-code">KIM-103</div>
-                                    </td>
-                                    <td>Ibu Rina Wijaya, S.Si</td>
-                                    <td class="score">78</td>
-                                    <td class="score">80</td>
-                                    <td class="score">75</td>
-                                    <td class="score">78</td>
-                                    <td><span class="grade B">B</span></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>Biologi</div>
-                                        <div class="subject-code">BIO-104</div>
-                                    </td>
-                                    <td>Bpk. Budi Santoso, M.Pd</td>
-                                    <td class="score">82</td>
-                                    <td class="score">76</td>
-                                    <td class="score">80</td>
-                                    <td class="score">79</td>
-                                    <td><span class="grade B">B</span></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>Bahasa Inggris</div>
-                                        <div class="subject-code">BIG-105</div>
-                                    </td>
-                                    <td>Ibu Maya Indah, S.Pd</td>
-                                    <td class="score">88</td>
-                                    <td class="score">85</td>
-                                    <td class="score">90</td>
-                                    <td class="score">88</td>
-                                    <td><span class="grade A">A</span></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>Bahasa Indonesia</div>
-                                        <div class="subject-code">BIN-106</div>
-                                    </td>
-                                    <td>Bpk. Agus Setiawan, S.Pd</td>
-                                    <td class="score">75</td>
-                                    <td class="score">70</td>
-                                    <td class="score">72</td>
-                                    <td class="score">72</td>
-                                    <td><span class="grade B">B</span></td>
-                                </tr>
+                                @foreach($gradeRecords as $rec)
+                                    <tr>
+                                        <td>
+                                            {{ $rec->course->name }}
+                                            <div class="subject-code">{{ $rec->course->code }}</div>
+                                        </td>
+                                        <td>{{ $rec->teacher->full_name }}</td>
+                                        <td class="score">{{ $rec->assignment_score }}</td>
+                                        <td class="score">{{ $rec->mid_exam_score }}</td>
+                                        <td class="score">{{ $rec->final_exam_score }}</td>
+                                        <td class="score">{{ $rec->final_score }}</td>
+                                        <td>
+                                            @php
+                                                $g = $rec->final_score;
+                                                if ($g >= 85)
+                                                    $grade = 'A';
+                                                elseif ($g >= 70)
+                                                    $grade = 'B';
+                                                elseif ($g >= 55)
+                                                    $grade = 'C';
+                                                else
+                                                    $grade = 'D';
+                                              @endphp
+                                            <span class="grade {{ $grade }}">{{ $grade }}</span>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="summary">
+                    {{-- Summary --}}
+                    <div class="summary d-flex gap-3 mt-4">
                         <div class="summary-card">
-                            <h3>Rata-rata Nilai</h3>
-                            <div class="summary-value">81.7</div>
-                            <div class="summary-description">Dari 6 mata pelajaran</div>
+                            <h3>Rata‑rata Nilai</h3>
+                            <div class="summary-value">{{ number_format($average, 2) }}</div>
+                            <div class="summary-description">
+                                Dari {{ $gradeRecords->count() }} mata pelajaran
+                            </div>
                         </div>
 
                         <div class="summary-card">
                             <h3>Nilai Tertinggi</h3>
-                            <div class="summary-value">89</div>
-                            <div class="summary-description">Mata Pelajaran Fisika</div>
+                            <div class="summary-value">{{ $highest }}</div>
+                            <div class="summary-description"></div>
                         </div>
 
                         <div class="summary-card">
                             <h3>Nilai Terendah</h3>
-                            <div class="summary-value">72</div>
-                            <div class="summary-description">Mata Pelajaran Bahasa Indonesia</div>
+                            <div class="summary-value">{{ $lowest }}</div>
+                            <div class="summary-description"></div>
                         </div>
 
                         <div class="summary-card">
                             <h3>Peringkat Kelas</h3>
-                            <div class="summary-value">5</div>
-                            <div class="summary-description">Dari 30 siswa</div>
+                            <div class="summary-value">{{ $rank ?? '-' }}</div>
+                            <div class="summary-description">
+                                Dari {{ count($allInClass) }} siswa
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
+
             </div>
         </div>
     </div>
