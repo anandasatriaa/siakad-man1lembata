@@ -59,15 +59,16 @@
                 </div>
             </div>
             <div class="col-lg-7 d-none d-lg-block">
-                <div id="auth-right">
-
+                <div id="auth-right" class="d-flex align-items-center justify-content-center">
+                    <img src="{{ asset('assets/images/bg/lembata.png') }}" alt="Background Image"
+                        style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
             const rememberCheckbox = document.getElementById('remember');
@@ -83,7 +84,7 @@
             }
 
             // Simpan ke localStorage saat submit
-            document.querySelector('form').addEventListener('submit', function() {
+            document.querySelector('form').addEventListener('submit', function () {
                 if (rememberCheckbox.checked) {
                     localStorage.setItem('savedEmail', emailInput.value);
                     localStorage.setItem('savedPassword', passwordInput.value);
