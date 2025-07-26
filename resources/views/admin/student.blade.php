@@ -101,7 +101,7 @@
                                                         data-full_name="{{ $student->full_name }}"
                                                         data-gender="{{ $student->gender }}"
                                                         data-birth_place="{{ $student->birth_place }}"
-                                                        data-birth_date="{{ $student->birth_date }}"
+                                                        data-birth_date="{{ $student->birth_date->format('Y-m-d') }}"
                                                         data-address="{{ $student->address }}"
                                                         data-phone="{{ $student->phone }}"
                                                         data-email="{{ $student->email }}"
