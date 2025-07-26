@@ -252,6 +252,7 @@
                     {{-- File (opsional ganti) --}}
                     <div class="mb-3">
                         <label for="editFile" class="form-label">Ganti File (opsional)</label>
+                        <div id="current-file-info" class="mb-2"></div>
                         <input type="file" name="file" id="editFile" class="form-control">
                         <div class="form-text">
                             Upload file baru jika ingin mengganti (Format: pdf | doc | docx | ppt | pptx | zip (maks 10MB)).
@@ -312,52 +313,68 @@
     </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const editButtons = document.querySelectorAll('.btn-edit');
-        editButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const id          = this.getAttribute('data-id');
-                const title       = this.getAttribute('data-title');
-                const classId     = this.getAttribute('data-class_id');
-                const courseId    = this.getAttribute('data-course_id');
-                const description = this.getAttribute('data-description');
+document.addEventListener('DOMContentLoaded', function() {
+    const editButtons = document.querySelectorAll('.btn-edit');
+    editButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id          = this.getAttribute('data-id');
+            const title       = this.getAttribute('data-title');
+            const classId     = this.getAttribute('data-class_id');
+            const courseId    = this.getAttribute('data-course_id');
+            const description = this.getAttribute('data-description');
+            const filePath    = this.getAttribute('data-file_path'); // Ambil path file
 
-                // Atur action form ke route update sesuai id
-                const formEdit = document.getElementById('formEdit');
-                formEdit.action  = "{{ url('guru/material/update') }}/" + id;
+            // Atur action form ke route update
+            const formEdit = document.getElementById('formEdit');
+            let updateUrl = "{{ route('teacher.material.update', ['id' => ':id']) }}";
+            formEdit.action = updateUrl.replace(':id', id);
 
-                // Isi field di modal
-                document.getElementById('editTitle').value       = title;
-                document.getElementById('editClass').value       = classId;
-                document.getElementById('editCourse').value      = courseId;
-                document.getElementById('editDescription').value = description;
-            });
+            // Isi field di modal
+            document.getElementById('editTitle').value       = title;
+            document.getElementById('editClass').value       = classId;
+            document.getElementById('editCourse').value      = courseId;
+            document.getElementById('editDescription').value = description;
+
+            // --- PERUBAHAN UNTUK MENAMPILKAN FILE ---
+            const currentFileInfo = document.getElementById('current-file-info');
+            if (filePath) {
+                // Ekstrak nama file dari path
+                const fileName = filePath.split('/').pop(); 
+                currentFileInfo.innerHTML = `
+                    <small class="text-muted">File saat ini: 
+                        <a href="/storage/${filePath}" target="_blank">${fileName}</a>
+                    </small>
+                `;
+            } else {
+                currentFileInfo.innerHTML = '<small class="text-muted">Tidak ada file terunggah.</small>';
+            }
         });
     });
+});
 </script>
 
 {{-- Confirm Delete --}}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-delete').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            const form = this.closest('.delete-material-form');
-            Swal.fire({
-                title: 'Yakin ingin menghapus materi ini?',
-                text: "Data akan hilang secara permanen!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-delete').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const form = this.closest('.delete-material-form');
+                Swal.fire({
+                    title: 'Yakin ingin menghapus materi ini?',
+                    text: "Data akan hilang secara permanen!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
             });
         });
     });
-});
 </script>
 @endpush

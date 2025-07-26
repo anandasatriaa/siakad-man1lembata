@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\SchoolClass;
 use App\Models\Admin\Course;
+use App\Models\Admin\Teacher;
 use App\Models\Teacher\TeacherMaterial;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -18,9 +19,9 @@ class TeacherMaterialController extends Controller
     public function index()
     {
         // Ambil semua materi milik guru yang login, beserta data kelas & course untuk dropdown
-        $teacherId = Auth::id();
+        $teacher = Teacher::where('user_id', Auth::id())->firstOrFail();
         $materials = TeacherMaterial::with(['classroom', 'course'])
-            ->where('teacher_id', $teacherId)
+            ->where('teacher_id', $teacher->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -43,13 +44,15 @@ class TeacherMaterialController extends Controller
             'file'        => 'required|file|mimes:pdf,doc,docx,ppt,pptx,zip|max:10240',
         ]);
 
+        $teacher = Teacher::where('user_id', Auth::id())->firstOrFail();
+
         $file      = $request->file('file');
         $fileName  = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
         $path      = $file->storeAs('teacher_materials', $fileName, 'public');
         $fileType  = $file->extension();
 
         TeacherMaterial::create([
-            'teacher_id'   => Auth::id(),
+            'teacher_id'   => $teacher->id,
             'class_id'     => $request->input('class_id'),
             'course_id'    => $request->input('course_id'),
             'title'        => $request->input('title'),
@@ -68,7 +71,8 @@ class TeacherMaterialController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $material = TeacherMaterial::where('teacher_id', Auth::id())
+        $teacher = Teacher::where('user_id', Auth::id())->firstOrFail();
+        $material = TeacherMaterial::where('teacher_id', $teacher->id)
             ->findOrFail($id);
 
         $request->validate([
@@ -112,7 +116,8 @@ class TeacherMaterialController extends Controller
      */
     public function destroy($id)
     {
-        $material = TeacherMaterial::where('teacher_id', Auth::id())
+        $teacher = Teacher::where('user_id', Auth::id())->firstOrFail();
+        $material = TeacherMaterial::where('teacher_id', $teacher->id)
             ->findOrFail($id);
 
         // Hapus file dari storage

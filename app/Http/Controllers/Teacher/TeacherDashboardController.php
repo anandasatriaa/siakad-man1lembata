@@ -28,13 +28,12 @@ class TeacherDashboardController extends Controller
                                      ->take(5)
                                      ->get();
 
-        // 2) Jadwal hari ini
-        $today = Carbon::now()->translatedFormat('l');
-        $schedules = Schedule::with(['schoolClass','course'])
+        // 2) Seluruh jadwal guru yang bersangkutan, dikelompokkan per hari
+        $schedules = Schedule::with(['class', 'course'])
             ->where('teacher_id', $teacher->id)
-            ->where('day', $today)
             ->orderBy('start_time')
-            ->get();
+            ->get()
+            ->groupBy('day'); // Mengelompokkan jadwal berdasarkan hari
 
         // 3) Ringkasan
         $classesTaught = SchoolClass::whereIn('id',
