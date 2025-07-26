@@ -61,10 +61,11 @@
                                                     <i class="bi bi-pencil-square me-1"></i>Edit
                                                 </button>
                                             @endif
-                                            <button class="btn btn-sm btn-outline-secondary flex-grow-1 ms-2 text-start"
+                                            <button class="btn btn-sm btn-outline-secondary flex-grow-1 ms-2 text-start d-flex justify-content-between align-items-center"
                                                 data-bs-toggle="collapse" data-bs-target="#jadwal-{{ $class->id }}"
                                                 aria-expanded="false">
-                                                {{ $class->name }}
+                                                <span>{{ $class->name }}</span>
+                                                <span class="toggle-icon fw-bold">+</span>
                                             </button>
                                         </div>
 
@@ -124,7 +125,7 @@
         </div>
 
         {{-- Add Schedule Modal --}}
-        <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-hidden="true">
+        {{-- <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <form method="POST" action="{{ route('admin.schedule.store') }}">
@@ -134,7 +135,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            {{-- Pilih Kelas --}}
+                            
                             <div class="mb-3">
                                 <label class="form-label">Kelas</label>
                                 <select name="class_id" class="form-select" required>
@@ -144,7 +145,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            {{-- Tabel Dinamis Add --}}
+                            
                             <div class="mb-3">
                                 <button type="button" class="btn btn-sm btn-success mb-2" id="btn-add-row">
                                     <i class="bi bi-plus-circle"></i> Tambah Baris
@@ -212,7 +213,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         {{-- Edit Modals --}}
         @foreach($classes as $class)
@@ -241,8 +242,40 @@
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
+                                        <template class="schedule-row-template">
+                                            <tr>
+                                                <td>
+                                                    <select name="days[]" class="form-select form-select-sm" required>
+                                                        @foreach($days as $d)
+                                                            <option value="{{ $d }}">{{ $d }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select name="course_ids[]" class="form-select form-select-sm" required>
+                                                        <option value="istirahat">Istirahat</option>
+                                                        @foreach($courses as $c)
+                                                            <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select name="teacher_ids[]" class="form-select form-select-sm" required>
+                                                        <option value="istirahat">Istirahat</option>
+                                                        @foreach($teachers as $t)
+                                                            <option value="{{ $t->id }}">{{ $t->full_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td><input type="time" name="start_times[]" class="form-control form-control-sm" required></td>
+                                                <td><input type="time" name="end_times[]" class="form-control form-control-sm" required></td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-sm btn-danger btn-remove-row"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </template>
                                         <tbody>
-                                            @foreach($class->schedules->sortBy(['day', 'start_time']) as $sch)
+                                            @forelse($class->schedules->sortBy(['day', 'start_time']) as $sch)
                                                 <tr>
                                                     <td>
                                                         <select name="days[]" class="form-select form-select-sm" required>
@@ -279,7 +312,9 @@
                                                                 class="bi bi-trash"></i></button>
                                                     </td>
                                                 </tr>
-                                            @endforeach
+                                            @empty
+                            {{-- Tidak perlu baris kosong di sini, JS akan menambahkannya --}}
+                        @endforelse
                                         </tbody>
                                     </table>
                                 </div>
@@ -293,7 +328,6 @@
                 </div>
             </div>
         @endforeach
-
 
         <!-- Modal Tambah Jadwal -->
         <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel"
@@ -453,48 +487,31 @@
             </script>
         @endif
 
+        {{-- ADD ROW & DELETE ROW --}}
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const tableBody = document.querySelector('#schedule-table tbody');
-                const btnAdd = document.getElementById('btn-add-row');
+            document.addEventListener('click', function (e) {
+                // Cek jika tombol 'Tambah Baris' diklik
+                if (e.target.closest('.btn-add-row')) {
+                    const button = e.target.closest('.btn-add-row');
+                    const modal = button.closest('.modal');
 
-                // Fungsi: Buat baris baru dengan elemen input/select yang sama
-                function createNewRow() {
-                    const firstRow = tableBody.querySelector('tr');
-                    const newRow = firstRow.cloneNode(true);
+                    // Cari template dan tbody di dalam modal yang aktif
+                    const template = modal.querySelector('.schedule-row-template');
+                    const tbody = modal.querySelector('tbody');
 
-                    // Kosongkan semua input/select di newRow
-                    newRow.querySelectorAll('select').forEach(sel => {
-                        sel.selectedIndex = 0;
-                    });
-                    newRow.querySelectorAll('input[type="time"]').forEach(inp => {
-                        inp.value = '';
-                    });
-
-                    return newRow;
+                    if (template && tbody) {
+                        // Clone konten dari template
+                        const newRow = template.content.cloneNode(true);
+                        tbody.appendChild(newRow);
+                    }
                 }
 
-                // Tambah baris saat tombol ditekan
-                btnAdd.addEventListener('click', function () {
-                    const newRow = createNewRow();
-                    tableBody.appendChild(newRow);
-                    updateRemoveButtons();
-                });
-
-                // Hapus baris jika tombol Hapus pada baris ditekan
-                function updateRemoveButtons() {
-                    tableBody.querySelectorAll('.btn-remove-row').forEach(btn => {
-                        btn.onclick = function () {
-                            const currentRows = tableBody.querySelectorAll('tr').length;
-                            if (currentRows > 1) {
-                                this.closest('tr').remove();
-                            }
-                        };
-                    });
+                // Cek jika tombol 'Hapus Baris' diklik
+                if (e.target.closest('.btn-remove-row')) {
+                    const button = e.target.closest('.btn-remove-row');
+                    const rowToRemove = button.closest('tr');
+                    rowToRemove.remove(); // Boleh menghapus baris terakhir sekalipun
                 }
-
-                // Inisialisasi pertama kali
-                updateRemoveButtons();
             });
         </script>
 
@@ -506,33 +523,15 @@
                 const icon = button.querySelector('.toggle-icon');
 
                 // Toggle icon saat collapse dibuka/tutup
-                target.addEventListener('show.bs.collapse', () => {
-                    icon.textContent = '−';
-                });
-
-                target.addEventListener('hide.bs.collapse', () => {
-                    icon.textContent = '+';
-                });
-            });
-        </script>
-
-        {{-- JS Dynamic Rows --}}
-        <script>
-            document.addEventListener('click', function (e) {
-                // tombol tambah baris
-                if (e.target.closest('.btn-add-row')) {
-                    const modal = e.target.closest('.modal');
-                    const tbody = modal.querySelector('tbody');
-                    const tr = tbody.querySelector('tr').cloneNode(true);
-                    tr.querySelectorAll('select, input').forEach(el => el.value = '');
-                    tbody.appendChild(tr);
-                }
-                // tombol hapus baris
-                if (e.target.closest('.btn-remove-row')) {
-                    const tr = e.target.closest('tr');
-                    const tbody = tr.parentNode;
-                    if (tbody.querySelectorAll('tr').length > 1) tr.remove();
+                if (icon) { // Hanya jalankan jika ikon ditemukan
+                    target.addEventListener('show.bs.collapse', () => {
+                        icon.textContent = '−';
+                    });
+                    target.addEventListener('hide.bs.collapse', () => {
+                        icon.textContent = '+';
+                    });
                 }
             });
         </script>
+
     @endpush
