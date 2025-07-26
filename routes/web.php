@@ -113,6 +113,7 @@ Route::prefix('kesiswaan')->middleware(['auth', 'level:2'])->group(function () {
 
     // GRADE (read‐only)
     Route::get('/grade', [AdminGradeController::class, 'index'])->name('kesiswaan.grade.index');
+    Route::get('/grade/students-by-class/{classId}', [AdminGradeController::class, 'getStudentsByClass'])->name('kesiswaan.grade.students-by-class');
 
     // SCHEDULE (read‐only)
     Route::get('/schedule', [AdminScheduleController::class, 'index'])->name('kesiswaan.schedule.index');
@@ -168,4 +169,10 @@ Route::prefix('parent')->middleware(['auth', 'level:5'])->group(function () {
     Route::get('/profile', [StudentProfileController::class, 'index'])->name('parent.profile.index');
     Route::post('/profile/update', [StudentProfileController::class, 'updateProfile'])->name('parent.profile.update');
     Route::post('profile/password', [StudentProfileController::class, 'updatePassword'])->name('parent.profile.password');
+});
+
+
+Route::middleware(['auth', 'level:1,2'])->group(function () {
+    Route::get('/grade', [AdminGradeController::class, 'index'])->name('admin.grade.index');
+    Route::get('/grade/students-by-class/{classId}', [AdminGradeController::class, 'getStudentsByClass'])->name('admin.grade.students-by-class');
 });

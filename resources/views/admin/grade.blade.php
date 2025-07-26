@@ -393,22 +393,22 @@
 
             <div class="content">
                 <div class="content-header">
-    <h2><i class="bi bi-bar-chart-line"></i> Laporan Nilai Akademik</h2>
-    <div>
-        <button class="btn btn-print">
-            <i class="bi bi-printer"></i> Cetak Laporan
-        </button>
-        <button class="btn">
-            <i class="bi bi-file-earmark-excel"></i> Export Excel
-        </button>
-    </div>
-</div>
+                    <h2><i class="bi bi-bar-chart-line"></i> Laporan Nilai Akademik</h2>
+                    {{-- <div>
+                        <button class="btn btn-print">
+                            <i class="bi bi-printer"></i> Cetak Laporan
+                        </button>
+                        <button class="btn">
+                            <i class="bi bi-file-earmark-excel"></i> Export Excel
+                        </button>
+                    </div> --}}
+                </div>
 
                 {{-- Filter form --}}
                 <form method="GET" action="{{ route('admin.grade.index') }}" class="filters">
                     {{-- Kelas --}}
                     <select name="class_id" id="kelas">
-                        <option value="">Semua Kelas</option>
+                        <option value="">-- Pilih Kelas --</option>
                         @foreach($classes as $cls)
                             <option value="{{ $cls->id }}" {{ $classId == $cls->id ? 'selected' : '' }}>
                                 {{ $cls->name }}
@@ -417,7 +417,7 @@
                     </select>
                     {{-- Cari Siswa --}}
                     <select name="student_id" id="siswa">
-                        <option value="">Semua Siswa</option>
+                        <option value="">-- Semua Siswa --</option>
                         @foreach($students as $std)
                             <option value="{{ $std->id }}" {{ optional($selectedStudent)->id == $std->id ? 'selected' : '' }}>
                                 {{ $std->full_name }} ({{ $std->nis }})
@@ -519,14 +519,14 @@
                         </div>
 
                         <div class="summary-card">
-    <h3>Nilai Tertinggi</h3>
-    <div class="summary-value">{{ number_format($highest ?? 0, 2) }}</div>
-</div>
+                            <h3>Nilai Tertinggi</h3>
+                            <div class="summary-value">{{ number_format($highest ?? 0, 2) }}</div>
+                        </div>
 
-<div class="summary-card">
-    <h3>Nilai Terendah</h3>
-    <div class="summary-value">{{ number_format($lowest ?? 0, 2) }}</div>
-</div>
+                        <div class="summary-card">
+                            <h3>Nilai Terendah</h3>
+                            <div class="summary-value">{{ number_format($lowest ?? 0, 2) }}</div>
+                        </div>
 
                         <div class="summary-card">
                             <h3>Peringkat Kelas</h3>
@@ -630,14 +630,14 @@
                             </div>
 
                             <div class="summary-card">
-    <h3>Nilai Tertinggi</h3>
-    <div class="summary-value">{{ number_format($highest ?? 0, 2) }}</div>
-</div>
+                                <h3>Nilai Tertinggi</h3>
+                                <div class="summary-value">{{ number_format($highest ?? 0, 2) }}</div>
+                            </div>
 
-<div class="summary-card">
-    <h3>Nilai Terendah</h3>
-    <div class="summary-value">{{ number_format($lowest ?? 0, 2) }}</div>
-</div>
+                            <div class="summary-card">
+                                <h3>Nilai Terendah</h3>
+                                <div class="summary-value">{{ number_format($lowest ?? 0, 2) }}</div>
+                            </div>
 
                             <div class="summary-card">
                                 <h3>Peringkat Kelas</h3>
@@ -741,7 +741,7 @@
                     fetch(route('admin.grade.students-by-class', classId))
                         .then(response => response.json())
                         .then(data => {
-                            siswaSelect.innerHTML = '<option value="">Semua Siswa</option>';
+                            siswaSelect.innerHTML = '<option value="">-- Semua Siswa --</option>';
                             data.forEach(student => {
                                 const option = document.createElement('option');
                                 option.value = student.id;
@@ -750,7 +750,7 @@
                             });
                         });
                 } else {
-                    siswaSelect.innerHTML = '<option value="">Semua Siswa</option>';
+                    siswaSelect.innerHTML = '<option value="">-- Semua Siswa --</option>';
                 }
             });
         }
