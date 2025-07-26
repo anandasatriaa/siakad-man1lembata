@@ -80,7 +80,7 @@
                                                     ({{ $material->course->code }})
                                                     &nbsp;|&nbsp;
                                                 @endif
-                                                Pengajar: <strong>{{ $material->teacher ? $material->teacher->full_name : '-' }}</strong>
+                                                Pengajar: <strong>{{ $material->teachers ? $material->teachers->full_name : '-' }}</strong>
                                                 &nbsp;|&nbsp;
                                                 Dipublikasikan: <strong>
                                                     {{ $material->published_at
