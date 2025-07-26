@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- DEVELOPED BY ANANDA SATRIA ARIYANTO (SEE MY PORTFOLIO: https://anandasatriaa.github.io/) -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +16,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
 
     {{-- DATATABLE --}}
     <link rel="stylesheet" href="{{ asset('assets/vendors/simple-datatables/style.css') }}">
@@ -52,8 +54,7 @@
                             </div>
                         </div>
                         <div class="toggler">
-                            <a href="#" class="sidebar-hide d-xl-none d-block"><i
-                                    class="bi bi-x bi-middle"></i></a>
+                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
                         </div>
                     </div>
                 </div>
@@ -70,8 +71,7 @@
                         </li>
 
                         {{-- Pengumuman --}}
-                        <li
-                            class="sidebar-item {{ request()->routeIs('teacher.announcement.index') ? 'active' : '' }}">
+                        <li class="sidebar-item {{ request()->routeIs('teacher.announcement.index') ? 'active' : '' }}">
                             <a href="{{ route('teacher.announcement.index') }}" class="sidebar-link">
                                 <i class="bi bi-megaphone-fill"></i>
                                 <span>Pengumuman</span>
@@ -138,7 +138,8 @@
                                         <div class="user-name text-end me-3">
                                             <h6 class="mb-0 text-gray-600">{{ $user->name }}</h6>
                                             <p class="mb-0 text-sm text-gray-600">
-                                                {{ $levels[$user->level] ?? 'Tidak Diketahui' }}</p>
+                                                {{ $levels[$user->level] ?? 'Tidak Diketahui' }}
+                                            </p>
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">
@@ -174,13 +175,12 @@
                 @yield('content')
 
                 <footer>
-                    <div class="footer clearfix mb-0 text-muted">
+                    <div class="footer clearfix mb-0 mt-4 text-muted">
                         <div class="float-start">
-                            <p>2021 &copy; Mazer</p>
+                            <p>{{ date('Y') }} &copy; Me</p>
                         </div>
                         <div class="float-end">
-                            <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
-                                    href="http://ahmadsaugi.com">A. Saugi</a></p>
+                            <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by Me</p>
                         </div>
                     </div>
                 </footer>
@@ -205,6 +205,9 @@
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+    <script>
+        console.log('%cDEVELOPED BY ANANDA SATRIA ARIYANTO\nhttps://anandasatriaa.github.io/', 'color: green; font-weight: bold; font-size: 14px');
+    </script>
     @stack('js')
 </body>
 
